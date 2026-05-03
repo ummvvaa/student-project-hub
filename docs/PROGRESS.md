@@ -53,7 +53,29 @@
 
 ---
 
-## 2. Что сделано (промпты 1–12, 14, 16–20, ICS-import)
+## 2. Что сделано (промпты 1–12, 14, 16–21, ICS-import)
+
+### Промпт 21 — Страница "Мои команды"
+
+**Backend:**
+- `src/controllers/teams.controller.ts` — добавлен `listMyTeams` и новый `TEAM_MINE_INCLUDE`:
+  - Лёгкий include: project (id, title, deadline), leader (id, fullName), members с user (id, fullName, email), tasks (только поле status)
+  - Для STUDENT: `where = { members: { some: { userId } } }` — команды, где юзер является участником
+  - Для TEACHER: `where = { project: { createdById: userId } }` — все команды в его проектах
+  - Для ADMIN: `where = {}` — все команды
+  - `orderBy: { createdAt: 'desc' }`
+- `src/routes/teams.routes.ts` — добавлен `GET /mine` (зарегистрирован **перед** `/:id`, чтобы Express не принял "mine" за id)
+
+**Frontend:**
+- `src/app/(app)/teams/page.tsx` — новая страница "Мои команды":
+  - Loader на время загрузки
+  - Empty state с иконкой Users и подсказкой про код приглашения
+  - Grid карточек (1 col mobile / 2 col sm / 3 col lg)
+  - `TeamCard`: название + бейдж "Лидер" (если leaderId === currentUser.id), ссылка на проект, дедлайн, аватары участников (до 5 + "+N"), прогресс-бар задач (DONE / total), кнопка "Открыть команду"
+  - `MemberAvatars`: цветные инициалы в кружках, -space-x-2 overlap
+  - `TaskProgress`: прогресс-бар с анимацией ширины
+
+- `src/components/Navbar.tsx` — добавлена ссылка "Команды" (`/teams`, иконка Users) в NAV_LINKS между Projects и dropdown
 
 ### Промпт 20 — Страница профиля и смена пароля
 

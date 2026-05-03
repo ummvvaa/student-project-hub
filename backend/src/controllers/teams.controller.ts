@@ -15,7 +15,25 @@ const joinSchema = z.object({
   inviteCode: z.string().length(8, 'Invite code must be 8 characters'),
 });
 
-// ─── Shared include ───────────────────────────────────────────────────────────
+// ─── Includes ─────────────────────────────────────────────────────────────────
+
+const TEAM_MINE_INCLUDE = {
+  project: {
+    select: { id: true, title: true, deadline: true },
+  },
+  leader: {
+    select: { id: true, fullName: true },
+  },
+  members: {
+    include: {
+      user: { select: { id: true, fullName: true, email: true } },
+    },
+    orderBy: { joinedAt: 'asc' as const },
+  },
+  tasks: {
+    select: { status: true },
+  },
+} satisfies Prisma.TeamInclude;
 
 const TEAM_FULL_INCLUDE = {
   project: {
@@ -54,6 +72,35 @@ async function resolveUniqueInviteCode(): Promise<string> {
 }
 
 // ─── Handlers ─────────────────────────────────────────────────────────────────
+
+export async function listMyTeams(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const { id: userId, role } = req.user!;
+
+    let where: Prisma.TeamWhereInput;
+    if (role === Role.STUDENT) {
+      where = { members: { some: { userId } } };
+    } else if (role === Role.TEACHER) {
+      where = { project: { createdById: userId } };
+    } else {
+      where = {};
+    }
+
+    const teams = await prisma.team.findMany({
+      where,
+      include: TEAM_MINE_INCLUDE,
+      orderBy: { createdAt: 'desc' },
+    });
+
+    res.json({ teams });
+  } catch (err) {
+    next(err);
+  }
+}
 
 export async function create(
   req: Request,

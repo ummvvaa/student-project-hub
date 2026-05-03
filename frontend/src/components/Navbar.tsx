@@ -9,6 +9,7 @@ import {
   Trophy,
   LayoutDashboard,
   FolderOpen,
+  Users,
   UserCircle,
   ChevronDown,
 } from 'lucide-react';
@@ -19,6 +20,7 @@ import { RoleBadge } from './ui/Badge';
 const NAV_LINKS = [
   { href: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
   { href: '/projects',  label: 'Projects',  icon: FolderOpen },
+  { href: '/teams',     label: 'Команды',   icon: Users },
 ];
 
 export function Navbar() {
