@@ -11,6 +11,7 @@ import {
   UserMinus,
   Crown,
   Sparkles,
+  Lock,
 } from 'lucide-react';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
@@ -81,6 +82,8 @@ export default function TeamDetailPage() {
 
   const isLeader = team.leaderId === user.id;
   const isMember = team.members.some((m) => m.userId === user.id);
+  const projectStatus = team.project?.status;
+  const isReadOnly = projectStatus === 'COMPLETED' || projectStatus === 'ARCHIVED';
 
   function openAddTask(status: TaskStatus) {
     setEditingTask(null);
@@ -158,6 +161,18 @@ export default function TeamDetailPage() {
           </span>
         </nav>
 
+        {/* Read-only banner */}
+        {isReadOnly && (
+          <div className="mb-6 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+            <Lock className="h-4 w-4 flex-shrink-0" />
+            <span>
+              Этот проект{' '}
+              {projectStatus === 'COMPLETED' ? 'завершён' : 'в архиве'}.
+              {' '}Доска доступна только для просмотра.
+            </span>
+          </div>
+        )}
+
         {/* Team header */}
         <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -167,13 +182,13 @@ export default function TeamDetailPage() {
             </p>
           </div>
           <div className="flex flex-wrap gap-2">
-            {isMember && (
+            {isMember && !isReadOnly && (
               <Button variant="secondary" size="sm" onClick={() => setRoadmapOpen(true)}>
                 <Sparkles className="h-4 w-4" />
                 AI-план
               </Button>
             )}
-            {isMember && !isLeader && (
+            {isMember && !isLeader && !isReadOnly && (
               <Button variant="danger" size="sm" onClick={handleLeave}>
                 <LogOut className="h-4 w-4" />
                 Покинуть команду
@@ -218,7 +233,7 @@ export default function TeamDetailPage() {
                           )}
                         </div>
                       </div>
-                      {isLeader && !isMe && (
+                      {isLeader && !isMe && !isReadOnly && (
                         <button
                           onClick={() =>
                             handleKick(m.userId, m.user?.fullName ?? 'участника')
@@ -272,6 +287,7 @@ export default function TeamDetailPage() {
               onTasksChange={setTasks}
               onAddTask={openAddTask}
               onEditTask={openEditTask}
+              readOnly={isReadOnly}
             />
           </div>
         </div>

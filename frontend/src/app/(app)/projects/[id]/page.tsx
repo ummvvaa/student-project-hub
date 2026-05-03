@@ -322,7 +322,7 @@ export default function ProjectDetailPage() {
                     variant="secondary"
                     onClick={async () => {
                       try {
-                        await api.patch(`/projects/${id}`, { status: 'COMPLETED' });
+                        await api.patch(`/projects/${id}/status`, { status: 'COMPLETED' });
                         setProject((p) => p ? { ...p, status: 'COMPLETED' } : p);
                         toast.success('Проект завершён');
                       } catch { toast.error('Ошибка'); }
@@ -331,13 +331,28 @@ export default function ProjectDetailPage() {
                     Завершить
                   </Button>
                 )}
+                {(project.status === 'COMPLETED' || project.status === 'ARCHIVED') && (
+                  <Button
+                    size="sm"
+                    variant="secondary"
+                    onClick={async () => {
+                      try {
+                        await api.patch(`/projects/${id}/status`, { status: 'ACTIVE' });
+                        setProject((p) => p ? { ...p, status: 'ACTIVE' } : p);
+                        toast.success('Проект восстановлен');
+                      } catch { toast.error('Ошибка'); }
+                    }}
+                  >
+                    Восстановить
+                  </Button>
+                )}
                 {project.status !== 'ARCHIVED' && (
                   <Button
                     size="sm"
                     variant="danger"
                     onClick={async () => {
                       try {
-                        await api.patch(`/projects/${id}`, { status: 'ARCHIVED' });
+                        await api.patch(`/projects/${id}/status`, { status: 'ARCHIVED' });
                         setProject((p) => p ? { ...p, status: 'ARCHIVED' } : p);
                         toast.success('Проект архивирован');
                       } catch { toast.error('Ошибка'); }

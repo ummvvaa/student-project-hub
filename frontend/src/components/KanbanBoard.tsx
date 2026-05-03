@@ -34,6 +34,7 @@ function KanbanColumn({
   tasks,
   onAddClick,
   onCardClick,
+  readOnly,
 }: {
   id: TaskStatus;
   label: string;
@@ -41,6 +42,7 @@ function KanbanColumn({
   tasks: Task[];
   onAddClick: (status: TaskStatus) => void;
   onCardClick: (task: Task) => void;
+  readOnly?: boolean;
 }) {
   const { isOver, setNodeRef } = useDroppable({ id });
 
@@ -50,7 +52,7 @@ function KanbanColumn({
       className={clsx(
         'flex flex-col rounded-2xl p-3 transition-colors min-h-[200px]',
         color,
-        isOver && 'ring-2 ring-indigo-300',
+        isOver && !readOnly && 'ring-2 ring-indigo-300',
       )}
     >
       <div className="mb-3 flex items-center justify-between px-1">
@@ -62,17 +64,24 @@ function KanbanColumn({
 
       <div className="flex flex-1 flex-col gap-2">
         {tasks.map((task) => (
-          <TaskCard key={task.id} task={task} onClick={() => onCardClick(task)} />
+          <TaskCard
+            key={task.id}
+            task={task}
+            onClick={readOnly ? undefined : () => onCardClick(task)}
+            disabled={readOnly}
+          />
         ))}
       </div>
 
-      <button
-        onClick={() => onAddClick(id)}
-        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-gray-300 py-2 text-xs text-gray-400 transition-colors hover:border-indigo-400 hover:text-indigo-500"
-      >
-        <Plus className="h-3.5 w-3.5" />
-        Добавить задачу
-      </button>
+      {!readOnly && (
+        <button
+          onClick={() => onAddClick(id)}
+          className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-gray-300 py-2 text-xs text-gray-400 transition-colors hover:border-indigo-400 hover:text-indigo-500"
+        >
+          <Plus className="h-3.5 w-3.5" />
+          Добавить задачу
+        </button>
+      )}
     </div>
   );
 }
@@ -82,14 +91,17 @@ interface KanbanBoardProps {
   onTasksChange: (tasks: Task[]) => void;
   onAddTask: (status: TaskStatus) => void;
   onEditTask: (task: Task) => void;
+  readOnly?: boolean;
 }
 
-export function KanbanBoard({ tasks, onTasksChange, onAddTask, onEditTask }: KanbanBoardProps) {
+export function KanbanBoard({ tasks, onTasksChange, onAddTask, onEditTask, readOnly }: KanbanBoardProps) {
   const [activeTask, setActiveTask] = useState<Task | null>(null);
 
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 8 } }),
   );
+  // Empty sensors when readOnly: no drag activation
+  const emptySensors = useSensors();
 
   function handleDragStart(event: DragStartEvent) {
     const task = tasks.find((t) => t.id === event.active.id);
@@ -98,6 +110,7 @@ export function KanbanBoard({ tasks, onTasksChange, onAddTask, onEditTask }: Kan
 
   async function handleDragEnd(event: DragEndEvent) {
     setActiveTask(null);
+    if (readOnly) return;
     const { active, over } = event;
     if (!over) return;
 
@@ -138,7 +151,11 @@ export function KanbanBoard({ tasks, onTasksChange, onAddTask, onEditTask }: Kan
   const byStatus = (status: TaskStatus) => tasks.filter((t) => t.status === status);
 
   return (
-    <DndContext sensors={sensors} onDragStart={handleDragStart} onDragEnd={handleDragEnd}>
+    <DndContext
+      sensors={readOnly ? emptySensors : sensors}
+      onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
+    >
       <div className="-mx-4 flex gap-3 overflow-x-auto px-4 pb-4 sm:mx-0 sm:grid sm:grid-cols-3 sm:gap-4 sm:overflow-visible sm:px-0 sm:pb-0">
         {COLUMNS.map((col) => (
           <div key={col.id} className="min-w-[272px] flex-shrink-0 sm:min-w-0">
@@ -149,6 +166,7 @@ export function KanbanBoard({ tasks, onTasksChange, onAddTask, onEditTask }: Kan
               tasks={byStatus(col.id)}
               onAddClick={onAddTask}
               onCardClick={onEditTask}
+              readOnly={readOnly}
             />
           </div>
         ))}

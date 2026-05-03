@@ -53,7 +53,44 @@
 
 ---
 
-## 2. Что сделано (промпты 1–12, 14, 16–21, ICS-import)
+## 2. Что сделано (промпты 1–12, 14, 16–22, ICS-import)
+
+### Промпт 22 — Статусы проектов, архив, удаление ссылки Projects
+
+**Backend:**
+- `src/controllers/projects.controller.ts`:
+  - `list` — добавлен query-параметр `?status=ACTIVE|COMPLETED|ARCHIVED|all`. По умолчанию (без параметра): ACTIVE для STUDENT и TEACHER, все для ADMIN. Это делает дашборд учителя чистым (только активные), архив вынесен отдельно.
+  - `changeStatus` — новый handler `PATCH /api/projects/:id/status`. Zod-валидация `{status: ProjectStatus}`. Доступ: createdBy или ADMIN. Включает gamification-триггер при переходе в COMPLETED.
+- `src/controllers/teams.controller.ts`:
+  - `TEAM_MINE_INCLUDE.project.select` — добавлен `status: true`
+  - `listArchiveTeams` — новый handler `GET /api/teams/archive`. Та же ролевая логика что у `listMyTeams`, но фильтр `project.status IN [COMPLETED, ARCHIVED]`. Сортировка `project.deadline DESC`.
+- `src/routes/projects.routes.ts` — добавлен `PATCH /:id/status` (перед `PATCH /:id`)
+- `src/routes/teams.routes.ts` — добавлен `GET /archive` (перед `/:id`)
+
+**Frontend:**
+- `src/components/KanbanBoard.tsx` — добавлен `readOnly?: boolean` prop:
+  - Когда true: `emptySensors` (no drag), скрыта кнопка "+", клик по карточке не открывает модал
+  - `KanbanColumn` получает `readOnly` и скрывает кнопку добавления
+  - `TaskCard` получает `disabled?: boolean` — скрывает курсор grab, отключает `useDraggable`
+- `src/app/(app)/teams/page.tsx`:
+  - Тип `TeamMine.project` расширен полем `status`
+  - `ProjectStatusBadge` (локальный): COMPLETED → зелёный "✓ Завершён", ARCHIVED → серый "📦 В архиве", ACTIVE → ничего
+  - Бейдж показывается в правом верхнем углу карточки команды
+- `src/app/(app)/projects/[id]/page.tsx`:
+  - Добавлена кнопка "Восстановить" при COMPLETED/ARCHIVED → ACTIVE
+  - Все кнопки смены статуса переключены на `PATCH /projects/:id/status`
+- `src/app/(app)/teams/[id]/page.tsx`:
+  - Вычисляется `isReadOnly = status === 'COMPLETED' || status === 'ARCHIVED'`
+  - Жёлтый информационный банер "Проект завершён/в архиве. Доска только для просмотра."
+  - Kanban получает `readOnly={isReadOnly}`; скрыты кнопки AI-план, "Покинуть", kick-участника
+- `src/app/(app)/archive/page.tsx` — новая страница архива:
+  - Заголовок + описание, fetches `GET /api/teams/archive`
+  - Loader / empty state с иконкой Archive
+  - Grid карточек в приглушённом стиле (opacity-90, серые аватары, серый прогресс-бар)
+  - Кнопка "Просмотреть" → `/teams/[id]` (read-only режим)
+- `src/components/Navbar.tsx`:
+  - Удалена ссылка "Projects" (давала 404)
+  - Добавлена "Архив" (иконка Archive) после "Команды"
 
 ### Промпт 21 — Страница "Мои команды"
 

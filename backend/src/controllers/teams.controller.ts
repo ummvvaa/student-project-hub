@@ -19,7 +19,7 @@ const joinSchema = z.object({
 
 const TEAM_MINE_INCLUDE = {
   project: {
-    select: { id: true, title: true, deadline: true },
+    select: { id: true, title: true, deadline: true, status: true },
   },
   leader: {
     select: { id: true, fullName: true },
@@ -94,6 +94,42 @@ export async function listMyTeams(
       where,
       include: TEAM_MINE_INCLUDE,
       orderBy: { createdAt: 'desc' },
+    });
+
+    res.json({ teams });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function listArchiveTeams(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const { id: userId, role } = req.user!;
+
+    const archiveStatuses = [ProjectStatus.COMPLETED, ProjectStatus.ARCHIVED];
+
+    let where: Prisma.TeamWhereInput;
+    if (role === Role.STUDENT) {
+      where = {
+        members: { some: { userId } },
+        project: { status: { in: archiveStatuses } },
+      };
+    } else if (role === Role.TEACHER) {
+      where = {
+        project: { createdById: userId, status: { in: archiveStatuses } },
+      };
+    } else {
+      where = { project: { status: { in: archiveStatuses } } };
+    }
+
+    const teams = await prisma.team.findMany({
+      where,
+      include: TEAM_MINE_INCLUDE,
+      orderBy: { project: { deadline: 'desc' } },
     });
 
     res.json({ teams });

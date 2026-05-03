@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { Role } from '@prisma/client';
-import { list, getById, create, update, deleteProject } from '../controllers/projects.controller';
+import { list, getById, create, update, changeStatus, deleteProject } from '../controllers/projects.controller';
 import { create as createTeam } from '../controllers/teams.controller';
 import { requireAuth, requireRole } from '../middleware/auth.middleware';
 import reviewsRouter from './reviews.routes';
@@ -31,6 +31,7 @@ router.use('/:projectId/ai-roadmap', roadmapRouter);
 router.use('/:projectId/import-ics', icsRouter);
 
 // Изменять/удалять может создатель или ADMIN — проверка внутри контроллера
+router.patch('/:id/status', changeStatus);
 router.patch('/:id', update);
 router.delete('/:id', deleteProject);
 

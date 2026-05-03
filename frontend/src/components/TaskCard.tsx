@@ -10,12 +10,13 @@ interface TaskCardProps {
   task: Task;
   overlay?: boolean;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
-export function TaskCard({ task, overlay = false, onClick }: TaskCardProps) {
+export function TaskCard({ task, overlay = false, onClick, disabled }: TaskCardProps) {
   const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
     id: task.id,
-    disabled: overlay,
+    disabled: overlay || disabled,
   });
 
   const style = overlay
@@ -33,7 +34,8 @@ export function TaskCard({ task, overlay = false, onClick }: TaskCardProps) {
       {...(overlay ? {} : { ...attributes, ...listeners })}
       onClick={onClick}
       className={clsx(
-        'rounded-xl border border-gray-200 bg-white p-3 shadow-sm cursor-grab active:cursor-grabbing select-none',
+        'rounded-xl border border-gray-200 bg-white p-3 shadow-sm select-none',
+        disabled ? 'cursor-default' : 'cursor-grab active:cursor-grabbing',
         'transition-shadow hover:shadow-md',
         isDragging && !overlay && 'opacity-30',
         overlay && 'shadow-xl ring-2 ring-indigo-300',

@@ -22,6 +22,10 @@ const updateSchema = z.object({
   status:         z.nativeEnum(ProjectStatus).optional(),
 });
 
+const changeStatusSchema = z.object({
+  status: z.nativeEnum(ProjectStatus),
+});
+
 // ─── Shared select ────────────────────────────────────────────────────────────
 
 const CREATOR_SELECT = {
@@ -46,13 +50,30 @@ export async function list(
 ): Promise<void> {
   try {
     const { role, id: userId } = req.user!;
+    const statusParam = req.query.status as string | undefined;
 
-    const where =
-      role === Role.ADMIN
-        ? {}
-        : role === Role.TEACHER
-        ? { createdById: userId }
-        : { status: ProjectStatus.ACTIVE };
+    if (statusParam && statusParam !== 'all') {
+      if (!Object.values(ProjectStatus).includes(statusParam as ProjectStatus)) {
+        next(new AppError(400, 'Invalid status parameter'));
+        return;
+      }
+    }
+
+    // Resolve status filter: explicit param wins; default = ACTIVE for non-admin
+    const statusWhere: ProjectStatus | undefined =
+      statusParam === 'all'
+        ? undefined
+        : statusParam
+        ? (statusParam as ProjectStatus)
+        : role === Role.ADMIN ? undefined : ProjectStatus.ACTIVE;
+
+    const baseWhere =
+      role === Role.TEACHER ? { createdById: userId } : {};
+
+    const where = {
+      ...baseWhere,
+      ...(statusWhere !== undefined && { status: statusWhere }),
+    };
 
     const projects = await prisma.project.findMany({
       where,
@@ -187,6 +208,63 @@ export async function update(
         uniqueIds.map((userId) =>
           awardForProjectFinish(userId).catch((e) =>
             console.error(`awardForProjectFinish failed for ${userId}:`, e),
+          ),
+        ),
+      );
+    }
+
+    res.json({ project });
+  } catch (err) {
+    next(err);
+  }
+}
+
+export async function changeStatus(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): Promise<void> {
+  try {
+    const existing = await prisma.project.findUnique({
+      where: { id: req.params.id },
+    });
+    if (!existing) {
+      next(new AppError(404, 'Project not found'));
+      return;
+    }
+
+    if (!canMutate(existing.createdById, req.user!.id, req.user!.role)) {
+      next(new AppError(403, 'Forbidden'));
+      return;
+    }
+
+    const parsed = changeStatusSchema.safeParse(req.body);
+    if (!parsed.success) {
+      next(new AppError(400, parsed.error.errors[0].message));
+      return;
+    }
+
+    const { status } = parsed.data;
+
+    const project = await prisma.project.update({
+      where: { id: req.params.id },
+      data: { status },
+      include: { createdBy: { select: CREATOR_SELECT } },
+    });
+
+    const justCompleted =
+      existing.status !== ProjectStatus.COMPLETED &&
+      project.status   === ProjectStatus.COMPLETED;
+    if (justCompleted) {
+      const memberships = await prisma.teamMember.findMany({
+        where:  { team: { projectId: project.id } },
+        select: { userId: true },
+      });
+      const uniqueIds = Array.from(new Set(memberships.map((m) => m.userId)));
+      await Promise.all(
+        uniqueIds.map((uid) =>
+          awardForProjectFinish(uid).catch((e) =>
+            console.error(`awardForProjectFinish failed for ${uid}:`, e),
           ),
         ),
       );

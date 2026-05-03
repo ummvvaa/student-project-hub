@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { listMyTeams, getById, join, leave, kickMember } from '../controllers/teams.controller';
+import { listMyTeams, listArchiveTeams, getById, join, leave, kickMember } from '../controllers/teams.controller';
 import { list, create } from '../controllers/tasks.controller';
 import { requireAuth } from '../middleware/auth.middleware';
 import { requireTeamMember } from '../middleware/team.middleware';
@@ -9,8 +9,9 @@ const router = Router();
 router.use(requireAuth);
 
 // ─── Team routes ──────────────────────────────────────────────────────────────
-// /mine must be registered before /:id so Express doesn't treat "mine" as an id
+// /mine and /archive must be registered before /:id
 router.get('/mine', listMyTeams);
+router.get('/archive', listArchiveTeams);
 router.get('/:id', getById);
 router.post('/join', join);
 router.delete('/:id/members/me', leave);
