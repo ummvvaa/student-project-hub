@@ -1,0 +1,141 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ─── Enums ────────────────────────────────────────────────────────────────────
+
+enum Role {
+  STUDENT
+  TEACHER
+  ADMIN
+}
+
+enum ProjectStatus {
+  ACTIVE
+  COMPLETED
+  ARCHIVED
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  DONE
+}
+
+// ─── Models ───────────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(cuid())
+  fullName  String
+  email     String   @unique
+  password  String
+  role      Role     @default(STUDENT)
+  skills    String[]
+  points    Int      @default(0)
+  badges    String[]
+  createdAt DateTime @default(now())
+
+  createdProjects Project[]
+  ledTeams        Team[]       @relation("TeamLeader")
+  teamMemberships TeamMember[]
+  assignedTasks   Task[]
+  givenReviews    PeerReview[] @relation("Reviewer")
+  receivedReviews PeerReview[] @relation("TargetUser")
+}
+
+model Project {
+  id             String        @id @default(cuid())
+  title          String
+  description    String
+  deadline       DateTime
+  status         ProjectStatus @default(ACTIVE)
+  createdById    String
+  requiredSkills String[]
+  createdAt      DateTime      @default(now())
+
+  // Restrict: нельзя удалить пользователя, пока у него есть проекты
+  createdBy   User        @relation(fields: [createdById], references: [id], onDelete: Restrict)
+  teams       Team[]
+  peerReviews PeerReview[]
+  aiRoadmap   AIRoadmap?
+}
+
+model Team {
+  id         String   @id @default(cuid())
+  name       String
+  inviteCode String   @unique
+  projectId  String
+  leaderId   String
+  createdAt  DateTime @default(now())
+
+  // Cascade: удаление проекта удаляет все его команды
+  project Project      @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  // Restrict: нельзя удалить лидера команды без переназначения
+  leader  User         @relation("TeamLeader", fields: [leaderId], references: [id], onDelete: Restrict)
+  members TeamMember[]
+  tasks   Task[]
+}
+
+model TeamMember {
+  teamId   String
+  userId   String
+  joinedAt DateTime @default(now())
+
+  // Cascade: удаление команды или пользователя убирает запись об участии
+  team Team @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@id([teamId, userId])
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  title       String
+  description String
+  status      TaskStatus @default(TODO)
+  deadline    DateTime?
+  teamId      String
+  assigneeId  String?
+  completedAt DateTime?
+  wasOnTime   Boolean?
+  createdAt   DateTime   @default(now())
+
+  // Cascade: удаление команды удаляет все задачи
+  team     Team  @relation(fields: [teamId], references: [id], onDelete: Cascade)
+  // SetNull: удаление пользователя снимает назначение, задача остаётся
+  assignee User? @relation(fields: [assigneeId], references: [id], onDelete: SetNull)
+}
+
+model PeerReview {
+  id           String   @id @default(cuid())
+  projectId    String
+  reviewerId   String
+  targetUserId String
+  score        Int      // 1–5, диапазон валидируется на уровне приложения (Zod)
+  comment      String
+  createdAt    DateTime @default(now())
+
+  // Cascade: удаление проекта/участника удаляет все связанные ревью
+  project    Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  reviewer   User    @relation("Reviewer", fields: [reviewerId], references: [id], onDelete: Cascade)
+  targetUser User    @relation("TargetUser", fields: [targetUserId], references: [id], onDelete: Cascade)
+
+  // Один пользователь может оставить только одно ревью на другого в рамках проекта
+  @@unique([projectId, reviewerId, targetUserId])
+}
+
+model AIRoadmap {
+  id             String   @id @default(cuid())
+  projectId      String   @unique
+  generatedSteps Json
+  createdAt      DateTime @default(now())
+
+  // Cascade: удаление проекта удаляет его роадмап
+  // @unique выше означает связь один-к-одному
+  project Project @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
