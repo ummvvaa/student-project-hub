@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Archive, CalendarDays, Loader2, ChevronRight } from 'lucide-react';
+import { Archive, CalendarDays, ChevronRight } from 'lucide-react';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import api from '../../../lib/api';
@@ -11,6 +11,7 @@ import { ApiError } from '../../../types';
 import { Card } from '../../../components/ui/Card';
 import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
+import { TeamCardSkeleton } from '../../../components/skeletons/TeamCardSkeleton';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -177,8 +178,14 @@ export default function ArchivePage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-8 w-8 animate-spin text-gray-400" />
+      <div className="space-y-6">
+        <div>
+          <div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
+          <div className="mt-1 h-4 w-64 animate-pulse rounded bg-gray-200" />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <TeamCardSkeleton /><TeamCardSkeleton /><TeamCardSkeleton />
+        </div>
       </div>
     );
   }

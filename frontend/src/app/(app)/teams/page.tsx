@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { Users, CalendarDays, Loader2, ChevronRight } from 'lucide-react';
+import { Users, CalendarDays, ChevronRight } from 'lucide-react';
 import { AxiosError } from 'axios';
 import toast from 'react-hot-toast';
 import api from '../../../lib/api';
@@ -11,6 +11,7 @@ import { ApiError } from '../../../types';
 import { Card } from '../../../components/ui/Card';
 import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
+import { TeamCardSkeleton } from '../../../components/skeletons/TeamCardSkeleton';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -195,8 +196,11 @@ export default function TeamsPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-800" />
+      <div className="space-y-6">
+        <div className="h-8 w-36 animate-pulse rounded bg-gray-200" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <TeamCardSkeleton /><TeamCardSkeleton /><TeamCardSkeleton />
+        </div>
       </div>
     );
   }

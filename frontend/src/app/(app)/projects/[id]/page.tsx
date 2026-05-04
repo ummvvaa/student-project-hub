@@ -26,6 +26,8 @@ import { Badge, ProjectStatusBadge } from '../../../../components/ui/Badge';
 import { Card, CardHeader, CardTitle } from '../../../../components/ui/Card';
 import { Modal } from '../../../../components/ui/Modal';
 import { MatchScoreBar } from '../../../../components/MatchScoreBar';
+import { ProjectCardSkeleton } from '../../../../components/skeletons/ProjectCardSkeleton';
+import { TeamCardSkeleton } from '../../../../components/skeletons/TeamCardSkeleton';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -254,8 +256,11 @@ export default function ProjectDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-400" />
+      <div className="mx-auto max-w-4xl space-y-6">
+        <ProjectCardSkeleton />
+        <div className="grid gap-4 sm:grid-cols-2">
+          <TeamCardSkeleton /><TeamCardSkeleton />
+        </div>
       </div>
     );
   }

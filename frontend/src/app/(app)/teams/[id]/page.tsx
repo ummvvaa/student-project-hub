@@ -6,7 +6,6 @@ import { useParams, useRouter } from 'next/navigation';
 import {
   ChevronRight,
   Users,
-  Loader2,
   LogOut,
   UserMinus,
   Crown,
@@ -24,6 +23,7 @@ import { Card } from '../../../../components/ui/Card';
 import { KanbanBoard } from '../../../../components/KanbanBoard';
 import { TaskModal } from '../../../../components/TaskModal';
 import { AIRoadmapModal } from '../../../../components/AIRoadmapModal';
+import { KanbanColumnSkeleton } from '../../../../components/skeletons/KanbanColumnSkeleton';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -72,8 +72,25 @@ export default function TeamDetailPage() {
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-400" />
+      <div className="mx-auto max-w-6xl">
+        <div className="mb-6 h-4 w-64 animate-pulse rounded bg-gray-200" />
+        <div className="mb-6 h-8 w-48 animate-pulse rounded bg-gray-200" />
+        <div className="grid gap-6 lg:grid-cols-[280px,1fr]">
+          <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
+            {[0, 1, 2, 3].map((i) => (
+              <div key={i} className="flex items-center gap-2">
+                <div className="h-8 w-8 flex-shrink-0 animate-pulse rounded-full bg-gray-200" />
+                <div className="flex-1 space-y-1">
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
+                  <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200" />
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <KanbanColumnSkeleton /><KanbanColumnSkeleton /><KanbanColumnSkeleton />
+          </div>
+        </div>
       </div>
     );
   }

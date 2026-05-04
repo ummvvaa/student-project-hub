@@ -8,7 +8,6 @@ import {
   Plus,
   Calendar,
   ChevronRight,
-  Loader2,
   Trophy,
   ClipboardList,
   Sparkles,
@@ -21,6 +20,8 @@ import { Button } from '../../../components/ui/Button';
 import { Badge, ProjectStatusBadge, RoleBadge } from '../../../components/ui/Badge';
 import { Card, CardHeader, CardTitle } from '../../../components/ui/Card';
 import { MatchScoreBar } from '../../../components/MatchScoreBar';
+import { ProjectCardSkeleton } from '../../../components/skeletons/ProjectCardSkeleton';
+import { TeamCardSkeleton } from '../../../components/skeletons/TeamCardSkeleton';
 import { Project, Team, TeamMember, User, ApiError, ProjectRecommendation } from '../../../types';
 
 // ─── Local extended types ─────────────────────────────────────────────────────
@@ -58,10 +59,45 @@ function EmptyState({
   );
 }
 
-function SectionSpinner() {
+function StudentDashboardSkeleton() {
   return (
-    <div className="flex items-center justify-center py-20">
-      <Loader2 className="h-7 w-7 animate-spin text-indigo-400" />
+    <div className="space-y-10">
+      <section>
+        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-gray-200" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <TeamCardSkeleton /><TeamCardSkeleton /><TeamCardSkeleton />
+        </div>
+      </section>
+      <section>
+        <div className="mb-4 h-6 w-44 animate-pulse rounded bg-gray-200" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ProjectCardSkeleton /><ProjectCardSkeleton /><ProjectCardSkeleton />
+        </div>
+      </section>
+    </div>
+  );
+}
+
+function TeacherDashboardSkeleton() {
+  return (
+    <div className="space-y-8">
+      <div className="grid gap-4 sm:grid-cols-3">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm flex items-center gap-4">
+            <div className="h-11 w-11 animate-pulse rounded-xl bg-gray-200 flex-shrink-0" />
+            <div className="space-y-1.5">
+              <div className="h-7 w-12 animate-pulse rounded bg-gray-200" />
+              <div className="h-4 w-24 animate-pulse rounded bg-gray-200" />
+            </div>
+          </div>
+        ))}
+      </div>
+      <section>
+        <div className="mb-4 h-6 w-36 animate-pulse rounded bg-gray-200" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          <ProjectCardSkeleton /><ProjectCardSkeleton /><ProjectCardSkeleton />
+        </div>
+      </section>
     </div>
   );
 }
@@ -222,7 +258,7 @@ function StudentDashboard({ user }: { user: User }) {
     fetchAll();
   }, [user.id]);
 
-  if (loading) return <SectionSpinner />;
+  if (loading) return <StudentDashboardSkeleton />;
 
   return (
     <div className="space-y-10">
@@ -359,7 +395,7 @@ function TeacherDashboard() {
   const totalTeams = projects.reduce((acc, p) => acc + (p._count?.teams ?? 0), 0);
   const activeCount = projects.filter((p) => p.status === 'ACTIVE').length;
 
-  if (loading) return <SectionSpinner />;
+  if (loading) return <TeacherDashboardSkeleton />;
 
   return (
     <div className="space-y-8">

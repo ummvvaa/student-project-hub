@@ -53,7 +53,19 @@
 
 ---
 
-## 2. Что сделано (промпты 1–12, 14, 16–22, ICS-import)
+## 2. Что сделано (промпты 1–12, 14, 16–23, ICS-import)
+
+### Промпт 23 — Skeleton loaders
+
+**Frontend:**
+- `src/components/ui/Skeleton.tsx` — базовый pulse-компонент
+- `src/components/skeletons/ProjectCardSkeleton.tsx`
+- `src/components/skeletons/TeamCardSkeleton.tsx`
+- `src/components/skeletons/TaskCardSkeleton.tsx`
+- `src/components/skeletons/KanbanColumnSkeleton.tsx`
+- `src/components/skeletons/ListSkeleton.tsx`
+- Заменены все спиннеры `Loader2` на skeleton-блоки в форме реального контента на страницах: `dashboard`, `teams`, `archive`, `projects/[id]`, `teams/[id]`, `profile`
+- Кнопки `loading` со спиннером остались без изменений (только page-level лоадеры заменены)
 
 ### Промпт 22 — Статусы проектов, архив, удаление ссылки Projects
 
@@ -996,6 +1008,15 @@ const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL });
 - `Button` и `Input` — `forwardRef` для возможности передачи ref снаружи
 - Варианты задаются через `Record<Variant, string>` объекты — легко добавлять новые
 - `Badge` — 6 вариантов + 3 domain-хелпера (`RoleBadge`, `TaskStatusBadge`, `ProjectStatusBadge`)
+- `Skeleton` (`src/components/ui/Skeleton.tsx`) — базовый pulse-блок (`animate-pulse bg-gray-200`), принимает `className`
+
+#### Skeleton-компоненты (`src/components/skeletons/`)
+- `ProjectCardSkeleton` — полоски заголовка, описания, даты, скиллов; используется в `dashboard` и `projects/[id]`
+- `TeamCardSkeleton` — заголовок, дедлайн, аватары, прогресс-бар, кнопка; используется в `dashboard`, `teams`, `archive`, `projects/[id]`
+- `TaskCardSkeleton` — заголовок, подзаголовок, аватар; используется внутри `KanbanColumnSkeleton`
+- `KanbanColumnSkeleton` — заголовок колонки + 3 × `TaskCardSkeleton`; используется в `teams/[id]`
+- `ListSkeleton` — универсальный список из N строк (props: `count`, `height`); доступен для будущих страниц
+- Все страницы с async-загрузкой (`dashboard`, `teams`, `archive`, `projects/[id]`, `teams/[id]`, `profile`) заменили спиннер `Loader2` на skeleton-блоки в форме реального контента
 
 #### Kanban drag-and-drop (KanbanBoard.tsx)
 - `PointerSensor` с `activationConstraint: { distance: 8 }` — предотвращает случайный drag при клике

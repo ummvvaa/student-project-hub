@@ -6,7 +6,6 @@ import {
   CheckCircle2,
   Star,
   Award,
-  Loader2,
   UserCircle,
   Lock,
 } from 'lucide-react';
@@ -19,6 +18,7 @@ import { Card, CardHeader, CardTitle } from '../../../components/ui/Card';
 import { Badge, RoleBadge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
 import { Input } from '../../../components/ui/Input';
+import { Skeleton } from '../../../components/ui/Skeleton';
 import { BADGES } from '../../../lib/badges';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
@@ -157,8 +157,13 @@ export default function ProfilePage() {
 
   if (!user) {
     return (
-      <div className="flex items-center justify-center py-32">
-        <Loader2 className="h-8 w-8 animate-spin text-primary-800" />
+      <div className="space-y-8">
+        <Skeleton className="h-8 w-40" />
+        <Skeleton className="h-20 w-full rounded-xl" />
+        <div className="grid gap-6 lg:grid-cols-2">
+          <Skeleton className="h-64 w-full rounded-xl" />
+          <Skeleton className="h-64 w-full rounded-xl" />
+        </div>
       </div>
     );
   }
@@ -278,8 +283,16 @@ export default function ProfilePage() {
 
       {/* Card 3: Stats — uses GET /api/users/me/profile from gamification module */}
       {statsLoading ? (
-        <div className="flex items-center justify-center py-8">
-          <Loader2 className="h-6 w-6 animate-spin text-primary-800" />
+        <div className="grid gap-4 sm:grid-cols-3">
+          {[0, 1, 2].map((i) => (
+            <Card key={i} padding="md" className="flex items-center gap-4">
+              <Skeleton className="h-11 w-11 flex-shrink-0 rounded-xl" />
+              <div className="space-y-1.5">
+                <Skeleton className="h-7 w-12" />
+                <Skeleton className="h-4 w-28" />
+              </div>
+            </Card>
+          ))}
         </div>
       ) : profile ? (
         <section className="grid gap-4 sm:grid-cols-3">
