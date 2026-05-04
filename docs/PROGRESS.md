@@ -53,7 +53,16 @@
 
 ---
 
-## 2. Что сделано (промпты 1–12, 14, 16–23, ICS-import)
+## 2. Что сделано (промпты 1–12, 14, 16–24, ICS-import)
+
+### Промпт 24 — Breadcrumbs навигация
+
+**Frontend:**
+- `src/components/Breadcrumbs.tsx` — pure-компонент; принимает `items: {label, href?}[]`; последний элемент `text-gray-500`, остальные `text-primary-800 hover:underline`; мобилка (< sm) — скрывает всё кроме последних 2 элементов, вместо них показывает `…`
+- `src/components/BreadcrumbsContainer.tsx` — client-компонент; `usePathname()` → `buildItems(pathname)` → `<Breadcrumbs>`; module-level `Map` кеширует имена проектов и команд; во время загрузки — `<Skeleton className="h-4 w-48" />`; на `/dashboard` — возвращает `null`
+- `src/app/(app)/layout.tsx` — добавлен `<BreadcrumbsContainer />` между `<Navbar />` и `<main>`
+- Поддерживаемые маршруты: `/teams`, `/teams/[id]`, `/projects/[id]`, `/projects/[id]/review|reviews|import`, `/archive`, `/profile`, `/admin/users`
+- Динамические сегменты: `/projects/[id]` → `GET /projects/{id}` (title), `/teams/[id]` → `GET /teams/{id}` (name)
 
 ### Промпт 23 — Skeleton loaders
 
@@ -1017,6 +1026,12 @@ const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL });
 - `KanbanColumnSkeleton` — заголовок колонки + 3 × `TaskCardSkeleton`; используется в `teams/[id]`
 - `ListSkeleton` — универсальный список из N строк (props: `count`, `height`); доступен для будущих страниц
 - Все страницы с async-загрузкой (`dashboard`, `teams`, `archive`, `projects/[id]`, `teams/[id]`, `profile`) заменили спиннер `Loader2` на skeleton-блоки в форме реального контента
+
+#### Breadcrumbs
+- `Breadcrumbs` (pure) + `BreadcrumbsContainer` (client, данные) — разделение ответственности
+- Кеш имён — module-level `Map<string, string>`, живёт на весь SPA-сеанс
+- Мобильный collapse через две группы элементов с `hidden sm:block` / `sm:hidden`
+- `(app)/layout.tsx` — единственное место монтирования; автоматически работает на всех app-страницах
 
 #### Kanban drag-and-drop (KanbanBoard.tsx)
 - `PointerSensor` с `activationConstraint: { distance: 8 }` — предотвращает случайный drag при клике
