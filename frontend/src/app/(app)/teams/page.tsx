@@ -61,13 +61,13 @@ function MemberAvatars({ members }: { members: TeamMember[] }) {
         <div
           key={m.userId}
           title={m.user.fullName}
-          className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-white text-xs font-semibold ${colors[i % colors.length]}`}
+          className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-white dark:border-gray-800 text-xs font-semibold ${colors[i % colors.length]}`}
         >
           {m.user.fullName[0].toUpperCase()}
         </div>
       ))}
       {extra > 0 && (
-        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs font-semibold text-gray-600">
+        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs font-semibold text-gray-600 dark:border-gray-800 dark:bg-gray-700 dark:text-gray-300">
           +{extra}
         </div>
       )}
@@ -82,13 +82,13 @@ function TaskProgress({ tasks }: { tasks: { status: string }[] }) {
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center justify-between text-xs text-gray-500">
+      <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
         <span>Задачи</span>
-        <span className="font-medium text-gray-700">
+        <span className="font-medium text-gray-700 dark:text-gray-200">
           {done}/{total}
         </span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
         <div
           className="h-full rounded-full bg-primary-800 transition-all duration-300"
           style={{ width: `${percent}%` }}
@@ -119,7 +119,7 @@ function TeamCard({ team, currentUserId }: { team: TeamMine; currentUserId: stri
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="truncate text-base font-semibold text-gray-900">
+            <h2 className="truncate text-base font-semibold text-gray-900 dark:text-gray-100">
               {team.name}
             </h2>
             {isLeader && (
@@ -128,7 +128,7 @@ function TeamCard({ team, currentUserId }: { team: TeamMine; currentUserId: stri
           </div>
           <Link
             href={`/projects/${team.project.id}`}
-            className="mt-0.5 block truncate text-sm text-gray-500 hover:text-primary-800 transition-colors"
+            className="mt-0.5 block truncate text-sm text-gray-500 hover:text-primary-800 transition-colors dark:text-gray-400 dark:hover:text-primary-300"
           >
             {team.project.title}
           </Link>
@@ -139,15 +139,15 @@ function TeamCard({ team, currentUserId }: { team: TeamMine; currentUserId: stri
       </div>
 
       {/* Deadline */}
-      <div className="flex items-center gap-1.5 text-sm text-gray-500">
-        <CalendarDays className="h-4 w-4 flex-shrink-0 text-gray-400" />
+      <div className="flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+        <CalendarDays className="h-4 w-4 flex-shrink-0 text-gray-400 dark:text-gray-500" />
         <span>{formatDate(team.project.deadline)}</span>
       </div>
 
       {/* Members */}
       <div className="flex items-center gap-3">
         <MemberAvatars members={team.members} />
-        <span className="text-xs text-gray-500">
+        <span className="text-xs text-gray-500 dark:text-gray-400">
           {team.members.length}{' '}
           {team.members.length === 1 ? 'участник' : team.members.length < 5 ? 'участника' : 'участников'}
         </span>
@@ -157,7 +157,7 @@ function TeamCard({ team, currentUserId }: { team: TeamMine; currentUserId: stri
       {team.tasks.length > 0 ? (
         <TaskProgress tasks={team.tasks} />
       ) : (
-        <p className="text-xs text-gray-400">Задач пока нет</p>
+        <p className="text-xs text-gray-400 dark:text-gray-500">Задач пока нет</p>
       )}
 
       {/* Action */}
@@ -197,7 +197,7 @@ export default function TeamsPage() {
   if (loading) {
     return (
       <div className="space-y-6">
-        <div className="h-8 w-36 animate-pulse rounded bg-gray-200" />
+        <div className="h-8 w-36 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <TeamCardSkeleton /><TeamCardSkeleton /><TeamCardSkeleton />
         </div>
@@ -207,15 +207,15 @@ export default function TeamsPage() {
 
   return (
     <div className="space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Мои команды</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Мои команды</h1>
 
       {teams.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 py-20 text-center">
-          <Users className="mb-4 h-12 w-12 text-gray-300" />
-          <p className="text-base font-medium text-gray-500">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 py-20 text-center dark:border-gray-700">
+          <Users className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
+          <p className="text-base font-medium text-gray-500 dark:text-gray-400">
             Вы пока не состоите ни в одной команде
           </p>
-          <p className="mt-1 text-sm text-gray-400">
+          <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
             Создайте команду в разделе проектов или присоединитесь по коду приглашения
           </p>
         </div>

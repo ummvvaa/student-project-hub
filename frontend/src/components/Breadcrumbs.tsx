@@ -11,20 +11,20 @@ export interface BreadcrumbItem {
 
 function BreadcrumbLink({ item, isLast }: { item: BreadcrumbItem; isLast: boolean }) {
   if (isLast) {
-    return <span className="font-medium text-gray-500">{item.label}</span>;
+    return <span className="font-medium text-gray-500 dark:text-gray-400">{item.label}</span>;
   }
   if (item.href) {
     return (
-      <Link href={item.href} className="text-primary-800 hover:underline transition-colors">
+      <Link href={item.href} className="text-primary-800 hover:underline transition-colors dark:text-primary-300">
         {item.label}
       </Link>
     );
   }
-  return <span className="text-gray-600">{item.label}</span>;
+  return <span className="text-gray-600 dark:text-gray-400">{item.label}</span>;
 }
 
 function Sep() {
-  return <ChevronRight className="h-3.5 w-3.5 flex-shrink-0 text-gray-300" />;
+  return <ChevronRight className="h-3.5 w-3.5 flex-shrink-0 text-gray-300 dark:text-gray-600" />;
 }
 
 export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
@@ -57,7 +57,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         {/* Ellipsis — mobile only */}
         {hasCollapse && (
           <>
-            <span className="text-gray-400 sm:hidden select-none">…</span>
+            <span className="text-gray-400 sm:hidden select-none dark:text-gray-500">…</span>
             <span className="sm:hidden"><Sep /></span>
           </>
         )}

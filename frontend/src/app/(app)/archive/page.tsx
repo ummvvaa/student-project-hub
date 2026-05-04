@@ -60,13 +60,13 @@ function MemberAvatars({ members }: { members: TeamMember[] }) {
         <div
           key={m.userId}
           title={m.user.fullName}
-          className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-200 text-xs font-semibold text-gray-600"
+          className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-200 text-xs font-semibold text-gray-600 dark:border-gray-800 dark:bg-gray-700 dark:text-gray-300"
         >
           {m.user.fullName[0].toUpperCase()}
         </div>
       ))}
       {extra > 0 && (
-        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs font-semibold text-gray-500">
+        <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs font-semibold text-gray-500 dark:border-gray-800 dark:bg-gray-700 dark:text-gray-400">
           +{extra}
         </div>
       )}
@@ -78,17 +78,17 @@ function TaskSummary({ tasks }: { tasks: { status: string }[] }) {
   const total = tasks.length;
   const done  = tasks.filter((t) => t.status === 'DONE').length;
 
-  if (total === 0) return <p className="text-xs text-gray-400">Задач не было</p>;
+  if (total === 0) return <p className="text-xs text-gray-400 dark:text-gray-500">Задач не было</p>;
 
   return (
     <div className="space-y-1">
-      <div className="flex items-center justify-between text-xs text-gray-400">
+      <div className="flex items-center justify-between text-xs text-gray-400 dark:text-gray-500">
         <span>Выполнено задач</span>
         <span className="font-medium">{done}/{total}</span>
       </div>
-      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100">
+      <div className="h-1.5 w-full overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
         <div
-          className="h-full rounded-full bg-gray-400 transition-all duration-300"
+          className="h-full rounded-full bg-gray-400 dark:bg-gray-500 transition-all duration-300"
           style={{ width: total > 0 ? `${Math.round((done / total) * 100)}%` : '0%' }}
         />
       </div>
@@ -107,14 +107,14 @@ function ArchiveCard({ team, currentUserId }: { team: TeamArchive; currentUserId
       <div className="flex items-start justify-between gap-2">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-2 flex-wrap">
-            <h2 className="truncate text-base font-semibold text-gray-700">
+            <h2 className="truncate text-base font-semibold text-gray-700 dark:text-gray-200">
               {team.name}
             </h2>
             {isLeader && <Badge variant="default">Лидер</Badge>}
           </div>
           <Link
             href={`/projects/${team.project.id}`}
-            className="mt-0.5 block truncate text-sm text-gray-400 hover:text-gray-600 transition-colors"
+            className="mt-0.5 block truncate text-sm text-gray-400 hover:text-gray-600 transition-colors dark:text-gray-500 dark:hover:text-gray-300"
           >
             {team.project.title}
           </Link>
@@ -125,7 +125,7 @@ function ArchiveCard({ team, currentUserId }: { team: TeamArchive; currentUserId
       </div>
 
       {/* Deadline */}
-      <div className="flex items-center gap-1.5 text-sm text-gray-400">
+      <div className="flex items-center gap-1.5 text-sm text-gray-400 dark:text-gray-500">
         <CalendarDays className="h-4 w-4 flex-shrink-0" />
         <span>{formatDate(team.project.deadline)}</span>
       </div>
@@ -133,7 +133,7 @@ function ArchiveCard({ team, currentUserId }: { team: TeamArchive; currentUserId
       {/* Members */}
       <div className="flex items-center gap-3">
         <MemberAvatars members={team.members} />
-        <span className="text-xs text-gray-400">
+        <span className="text-xs text-gray-400 dark:text-gray-500">
           {team.members.length}{' '}
           {team.members.length === 1 ? 'участник' : team.members.length < 5 ? 'участника' : 'участников'}
         </span>
@@ -145,7 +145,7 @@ function ArchiveCard({ team, currentUserId }: { team: TeamArchive; currentUserId
       {/* Action */}
       <div className="mt-auto pt-1">
         <Link href={`/teams/${team.id}`}>
-          <Button variant="secondary" size="sm" className="w-full gap-1.5 text-gray-500">
+          <Button variant="secondary" size="sm" className="w-full gap-1.5 text-gray-500 dark:text-gray-400">
             Просмотреть
             <ChevronRight className="h-4 w-4" />
           </Button>
@@ -180,8 +180,8 @@ export default function ArchivePage() {
     return (
       <div className="space-y-6">
         <div>
-          <div className="h-8 w-48 animate-pulse rounded bg-gray-200" />
-          <div className="mt-1 h-4 w-64 animate-pulse rounded bg-gray-200" />
+          <div className="h-8 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+          <div className="mt-1 h-4 w-64 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <TeamCardSkeleton /><TeamCardSkeleton /><TeamCardSkeleton />
@@ -193,17 +193,17 @@ export default function ArchivePage() {
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Архив проектов</h1>
-        <p className="mt-1 text-sm text-gray-500">
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Архив проектов</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
           Завершённые и архивированные проекты ваших команд
         </p>
       </div>
 
       {teams.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 py-20 text-center">
-          <Archive className="mb-4 h-12 w-12 text-gray-300" />
-          <p className="text-base font-medium text-gray-500">В архиве пока пусто</p>
-          <p className="mt-1 text-sm text-gray-400">
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-gray-300 py-20 text-center dark:border-gray-700">
+          <Archive className="mb-4 h-12 w-12 text-gray-300 dark:text-gray-600" />
+          <p className="text-base font-medium text-gray-500 dark:text-gray-400">В архиве пока пусто</p>
+          <p className="mt-1 text-sm text-gray-400 dark:text-gray-500">
             Здесь появятся завершённые и архивированные проекты
           </p>
         </div>

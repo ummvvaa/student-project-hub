@@ -22,9 +22,9 @@ import { triggerAuthRefresh } from '../hooks/useAuth';
 import { BADGES } from '../lib/badges';
 
 const COLUMNS: { id: TaskStatus; label: string; color: string }[] = [
-  { id: 'TODO',        label: 'К выполнению', color: 'bg-gray-100'   },
-  { id: 'IN_PROGRESS', label: 'В процессе',   color: 'bg-blue-50'    },
-  { id: 'DONE',        label: 'Готово',        color: 'bg-green-50'   },
+  { id: 'TODO',        label: 'К выполнению', color: 'bg-gray-100 dark:bg-gray-800/60'   },
+  { id: 'IN_PROGRESS', label: 'В процессе',   color: 'bg-blue-50 dark:bg-blue-950/30'    },
+  { id: 'DONE',        label: 'Готово',        color: 'bg-green-50 dark:bg-green-950/30'   },
 ];
 
 function KanbanColumn({
@@ -56,8 +56,8 @@ function KanbanColumn({
       )}
     >
       <div className="mb-3 flex items-center justify-between px-1">
-        <span className="text-sm font-semibold text-gray-700">{label}</span>
-        <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-gray-500 shadow-sm">
+        <span className="text-sm font-semibold text-gray-700 dark:text-gray-200">{label}</span>
+        <span className="rounded-full bg-white px-2 py-0.5 text-xs font-medium text-gray-500 shadow-sm dark:bg-gray-700 dark:text-gray-300 dark:shadow-none">
           {tasks.length}
         </span>
       </div>
@@ -76,7 +76,7 @@ function KanbanColumn({
       {!readOnly && (
         <button
           onClick={() => onAddClick(id)}
-          className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-gray-300 py-2 text-xs text-gray-400 transition-colors hover:border-indigo-400 hover:text-indigo-500"
+          className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-xl border border-dashed border-gray-300 py-2 text-xs text-gray-400 transition-colors hover:border-indigo-400 hover:text-indigo-500 dark:border-gray-600 dark:text-gray-500 dark:hover:border-indigo-500 dark:hover:text-indigo-400"
         >
           <Plus className="h-3.5 w-3.5" />
           Добавить задачу

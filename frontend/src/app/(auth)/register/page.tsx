@@ -57,11 +57,11 @@ export default function RegisterPage() {
 
   return (
     <div className="w-full max-w-md">
-      <div className="rounded-2xl bg-white px-8 py-10 shadow-xl shadow-gray-200/60 ring-1 ring-gray-200">
+      <div className="rounded-2xl bg-white px-8 py-10 shadow-xl shadow-gray-200/60 ring-1 ring-gray-200 dark:bg-gray-800 dark:ring-gray-700 dark:shadow-none">
         {/* Header */}
         <div className="mb-8 text-center">
-          <h1 className="text-2xl font-bold text-gray-900">Создать аккаунт</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Создать аккаунт</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Присоединяйтесь к платформе
           </p>
         </div>
@@ -99,7 +99,7 @@ export default function RegisterPage() {
 
           {/* Role picker */}
           <fieldset>
-            <legend className="mb-2 text-sm font-medium text-gray-700">Роль</legend>
+            <legend className="mb-2 text-sm font-medium text-gray-700 dark:text-gray-300">Роль</legend>
             <div className="grid grid-cols-2 gap-3">
               {(['STUDENT', 'TEACHER'] as RegisterRole[]).map((r) => (
                 <label
@@ -108,8 +108,8 @@ export default function RegisterPage() {
                     'flex cursor-pointer items-center justify-center rounded-lg border-2 px-4 py-3',
                     'text-sm font-medium transition-colors',
                     role === r
-                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700'
-                      : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50',
+                      ? 'border-indigo-600 bg-indigo-50 text-indigo-700 dark:border-indigo-500 dark:bg-indigo-900/30 dark:text-indigo-300'
+                      : 'border-gray-200 text-gray-600 hover:border-gray-300 hover:bg-gray-50 dark:border-gray-700 dark:text-gray-300 dark:hover:border-gray-600 dark:hover:bg-gray-700/40',
                   ].join(' ')}
                 >
                   <input
@@ -146,11 +146,11 @@ export default function RegisterPage() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
           Уже есть аккаунт?{' '}
           <Link
             href="/login"
-            className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline"
+            className="font-medium text-indigo-600 hover:text-indigo-500 hover:underline dark:text-indigo-400"
           >
             Войти
           </Link>

@@ -53,7 +53,33 @@
 
 ---
 
-## 2. Что сделано (промпты 1–12, 14, 16–24, ICS-import)
+## 2. Что сделано (промпты 1–12, 14, 16–25, ICS-import)
+
+### Промпт 25 — Тёмная тема
+
+**Frontend:**
+- `tailwind.config.ts` — добавлен `darkMode: 'class'` (не `'media'` — пользователь переключает руками; класс `dark` навешивается на `<html>`)
+- `src/lib/theme.ts` — `getTheme()` (читает localStorage, fallback на `prefers-color-scheme`), `setTheme(theme)` (пишет в localStorage + `<html>.classList.toggle('dark')` + `dataset.theme`), `toggleTheme()`, `hasStoredTheme()`. Все функции guard-ят `typeof window === 'undefined'`.
+- `src/components/ThemeProvider.tsx` — client-компонент с React Context (`useTheme()`). На mount синхронизируется с localStorage/system pref. Подписывается на `matchMedia('(prefers-color-scheme: dark)')` — обновляется при смене system pref **только если пользователь явно не выбирал** (`hasStoredTheme()` === false).
+- `src/components/ThemeToggle.tsx` — круглая кнопка-иконка (Sun/Moon из lucide-react) в Navbar справа, перед dropdown профиля. По клику вызывает `toggle()`.
+- `src/app/layout.tsx`:
+  - Добавлен inline `<script>` в `<head>` — выполняется ДО гидратации, читает localStorage/system pref и навешивает класс `dark` на `<html>` (предотвращает flash of light theme при загрузке).
+  - `<html suppressHydrationWarning>` — класс `dark` ставится скриптом до React, чтобы не было mismatch.
+  - `<body>` обёрнут в `<ThemeProvider>`. Базовые `bg-gray-50 dark:bg-gray-950 text-gray-900 dark:text-gray-100`.
+  - Toaster получил `className: '!bg-white !text-gray-900 dark:!bg-gray-800 dark:!text-gray-100'` (через `toastOptions`).
+- `src/app/globals.css` — удалён `@media (prefers-color-scheme: dark)` блок (он перетирал ручной выбор пользователя).
+- Применены `dark:` классы по правилам:
+  - `bg-white` → `dark:bg-gray-800` (карточки), `bg-gray-50` → `dark:bg-gray-950` (фон страницы), `bg-gray-100` → `dark:bg-gray-700`/`dark:bg-gray-800`
+  - `text-gray-900` → `dark:text-gray-100`, `text-gray-700` → `dark:text-gray-300`, `text-gray-500` → `dark:text-gray-400`, `text-gray-400` → `dark:text-gray-500`
+  - `border-gray-200` → `dark:border-gray-700`, `border-gray-300` → `dark:border-gray-600`, `border-gray-100` → `dark:border-gray-700`
+  - `shadow-sm`/`shadow-xl` на карточках/модалках → `dark:shadow-none`
+  - Hover: `hover:bg-gray-100` → `dark:hover:bg-gray-800`/`dark:hover:bg-gray-700`
+  - Inputs: `bg-white` → `dark:bg-gray-800`, `dark:border-gray-700`, `dark:text-gray-100`, `dark:placeholder-gray-500`
+  - Bаджи (`Badge.variantClasses`) — для каждого варианта дополнен `dark:bg-{color}-900/40 dark:text-{color}-300` (приглушены, но цвет сохранён)
+  - Канбан (`KanbanBoard.COLUMNS`) — `bg-gray-100` → `dark:bg-gray-800/60`, `bg-blue-50` → `dark:bg-blue-950/30`, `bg-green-50` → `dark:bg-green-950/30`
+  - `TaskCard`, `Modal`, `Card` — тёмный фон `gray-800`, рамка `gray-700`, заменён `shadow-sm` на `dark:shadow-none + dark:border`
+- Файлы с применением `dark:` классов: `Card`, `Button`, `Input`, `Textarea`, `Badge`, `Modal`, `Skeleton` (был раньше), `Navbar`, `Breadcrumbs`, `KanbanBoard`, `TaskCard`, `TaskModal`, `AIRoadmapModal`, `MatchScoreBar`, `AuthGuard`, скелетоны (`TaskCardSkeleton`, `TeamCardSkeleton`, `KanbanColumnSkeleton`); страницы: `(auth) layout`, `login`, `register`, `(app) layout`, `dashboard`, `teams`, `teams/[id]`, `projects/[id]`, `projects/[id]/import`, `projects/new`, `archive`, `profile`
+- Дефолтная тема — light. При первом заходе без сохранённого выбора читается `prefers-color-scheme`. Primary бордовый (`#7B1F2A`) и lucide-react иконки (наследуют `currentColor`) не требуют отдельных dark-вариантов.
 
 ### Промпт 24 — Breadcrumbs навигация
 
@@ -1044,6 +1070,13 @@ const api = axios.create({ baseURL: process.env.NEXT_PUBLIC_API_URL });
 - `(auth)` — страницы без Navbar, с gradient layout
 - `(app)` — страницы с AuthGuard + Navbar, `max-w-7xl` main container
 - Route groups не влияют на URL (скобки игнорируются)
+
+#### Тёмная тема
+- Tailwind `darkMode: 'class'` — класс `dark` на `<html>` управляет всеми `dark:` модификаторами
+- `src/lib/theme.ts` + `ThemeProvider` + `ThemeToggle` — чтение/запись в localStorage (`'theme'`), fallback на `prefers-color-scheme`
+- Inline `<script>` в `<head>` (`src/app/layout.tsx`) ставит класс до гидратации — нет flash светлой темы
+- При смене system pref **только если пользователь явно не выбирал** — иначе ручной выбор priority
+- Правила применения dark-классов: см. промпт 25 в разделе 2
 
 #### Error handling на фронте
 ```typescript

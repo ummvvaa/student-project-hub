@@ -12,13 +12,13 @@ interface MatchScoreBarProps {
 function scoreColor(score: number): string {
   if (score >= 0.6) return 'bg-emerald-500';
   if (score >= 0.3) return 'bg-amber-400';
-  return 'bg-gray-300';
+  return 'bg-gray-300 dark:bg-gray-600';
 }
 
 function scoreTextColor(score: number): string {
-  if (score >= 0.6) return 'text-emerald-700';
-  if (score >= 0.3) return 'text-amber-700';
-  return 'text-gray-400';
+  if (score >= 0.6) return 'text-emerald-700 dark:text-emerald-400';
+  if (score >= 0.3) return 'text-amber-700 dark:text-amber-400';
+  return 'text-gray-400 dark:text-gray-500';
 }
 
 export function MatchScoreBar({
@@ -35,7 +35,7 @@ export function MatchScoreBar({
 
   return (
     <div className={clsx('flex items-center gap-2', className)} title={tooltip}>
-      <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100">
+      <div className="relative h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100 dark:bg-gray-700">
         <div
           className={clsx('h-full rounded-full transition-all duration-300', scoreColor(score))}
           style={{ width: `${pct}%` }}

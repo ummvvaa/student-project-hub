@@ -19,7 +19,7 @@ export function TeamCardSkeleton() {
       {/* avatars */}
       <div className="flex -space-x-2">
         {[0, 1, 2].map((i) => (
-          <Skeleton key={i} className="h-8 w-8 flex-shrink-0 rounded-full border-2 border-white" />
+          <Skeleton key={i} className="h-8 w-8 flex-shrink-0 rounded-full border-2 border-white dark:border-gray-800" />
         ))}
       </div>
 

@@ -47,12 +47,12 @@ function StatTile({
 }) {
   return (
     <Card padding="md" className="flex items-center gap-4">
-      <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-primary-50">
-        <Icon className="h-5 w-5 text-primary-800" />
+      <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-primary-50 dark:bg-primary-900/30">
+        <Icon className="h-5 w-5 text-primary-800 dark:text-primary-300" />
       </div>
       <div className="min-w-0">
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
-        <p className="truncate text-sm text-gray-500">{label}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
+        <p className="truncate text-sm text-gray-500 dark:text-gray-400">{label}</p>
       </div>
     </Card>
   );
@@ -176,17 +176,17 @@ export default function ProfilePage() {
 
   return (
     <div className="space-y-8">
-      <h1 className="text-2xl font-bold text-gray-900">Мой профиль</h1>
+      <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Мой профиль</h1>
 
       {/* Identity header */}
       <Card padding="md">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary-100 text-xl font-semibold text-primary-800">
+          <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-full bg-primary-100 text-xl font-semibold text-primary-800 dark:bg-primary-900/40 dark:text-primary-300">
             {user.fullName[0].toUpperCase()}
           </div>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-xl font-bold text-gray-900">{user.fullName}</p>
-            <p className="truncate text-sm text-gray-500">{user.email}</p>
+            <p className="truncate text-xl font-bold text-gray-900 dark:text-gray-100">{user.fullName}</p>
+            <p className="truncate text-sm text-gray-500 dark:text-gray-400">{user.email}</p>
           </div>
           <RoleBadge role={user.role} />
         </div>
@@ -207,7 +207,7 @@ export default function ProfilePage() {
         <Card padding="lg">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <UserCircle className="h-5 w-5 text-primary-800" />
+              <UserCircle className="h-5 w-5 text-primary-800 dark:text-primary-300" />
               <CardTitle>Информация</CardTitle>
             </div>
           </CardHeader>
@@ -242,7 +242,7 @@ export default function ProfilePage() {
         <Card padding="lg">
           <CardHeader>
             <div className="flex items-center gap-2">
-              <Lock className="h-5 w-5 text-primary-800" />
+              <Lock className="h-5 w-5 text-primary-800 dark:text-primary-300" />
               <CardTitle>Сменить пароль</CardTitle>
             </div>
           </CardHeader>
@@ -272,7 +272,7 @@ export default function ProfilePage() {
               required
             />
             {passwordError && (
-              <p className="text-xs text-red-600">{passwordError}</p>
+              <p className="text-xs text-red-600 dark:text-red-400">{passwordError}</p>
             )}
             <Button type="submit" loading={passwordSaving} className="w-full">
               Сменить пароль
@@ -309,9 +309,9 @@ export default function ProfilePage() {
       {/* Badges grid */}
       <section>
         <div className="mb-4 flex items-center gap-2">
-          <Award className="h-5 w-5 text-primary-800" />
-          <h2 className="text-lg font-semibold text-gray-900">Бейджи</h2>
-          <span className="ml-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-800">
+          <Award className="h-5 w-5 text-primary-800 dark:text-primary-300" />
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Бейджи</h2>
+          <span className="ml-1 rounded-full bg-primary-50 px-2 py-0.5 text-xs font-medium text-primary-800 dark:bg-primary-900/30 dark:text-primary-300">
             {earnedBadges.size} из {Object.keys(BADGES).length}
           </span>
         </div>
@@ -330,8 +330,8 @@ export default function ProfilePage() {
                 }
               >
                 <div className="mb-2 text-4xl" aria-hidden>{info.emoji}</div>
-                <p className="font-semibold text-gray-900">{info.name}</p>
-                <p className="mt-1 text-xs text-gray-500">{info.description}</p>
+                <p className="font-semibold text-gray-900 dark:text-gray-100">{info.name}</p>
+                <p className="mt-1 text-xs text-gray-500 dark:text-gray-400">{info.description}</p>
                 <Badge variant={earned ? 'success' : 'default'} className="mt-3">
                   {earned ? 'Получен' : 'Не получен'}
                 </Badge>

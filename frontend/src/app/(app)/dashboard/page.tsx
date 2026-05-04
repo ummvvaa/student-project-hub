@@ -52,8 +52,8 @@ function EmptyState({
 }) {
   return (
     <Card className="flex flex-col items-center justify-center py-14 text-center">
-      <Icon className="mb-3 h-10 w-10 text-gray-300" />
-      <p className="mb-4 text-sm text-gray-500">{text}</p>
+      <Icon className="mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
+      <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">{text}</p>
       {action}
     </Card>
   );
@@ -63,13 +63,13 @@ function StudentDashboardSkeleton() {
   return (
     <div className="space-y-10">
       <section>
-        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-gray-200" />
+        <div className="mb-4 h-6 w-32 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <TeamCardSkeleton /><TeamCardSkeleton /><TeamCardSkeleton />
         </div>
       </section>
       <section>
-        <div className="mb-4 h-6 w-44 animate-pulse rounded bg-gray-200" />
+        <div className="mb-4 h-6 w-44 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <ProjectCardSkeleton /><ProjectCardSkeleton /><ProjectCardSkeleton />
         </div>
@@ -83,17 +83,17 @@ function TeacherDashboardSkeleton() {
     <div className="space-y-8">
       <div className="grid gap-4 sm:grid-cols-3">
         {[0, 1, 2].map((i) => (
-          <div key={i} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm flex items-center gap-4">
-            <div className="h-11 w-11 animate-pulse rounded-xl bg-gray-200 flex-shrink-0" />
+          <div key={i} className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm flex items-center gap-4 dark:border-gray-700 dark:bg-gray-800 dark:shadow-none">
+            <div className="h-11 w-11 animate-pulse rounded-xl bg-gray-200 flex-shrink-0 dark:bg-gray-700" />
             <div className="space-y-1.5">
-              <div className="h-7 w-12 animate-pulse rounded bg-gray-200" />
-              <div className="h-4 w-24 animate-pulse rounded bg-gray-200" />
+              <div className="h-7 w-12 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+              <div className="h-4 w-24 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
             </div>
           </div>
         ))}
       </div>
       <section>
-        <div className="mb-4 h-6 w-36 animate-pulse rounded bg-gray-200" />
+        <div className="mb-4 h-6 w-36 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           <ProjectCardSkeleton /><ProjectCardSkeleton /><ProjectCardSkeleton />
         </div>
@@ -114,18 +114,18 @@ function ProjectCard({ project }: { project: Project }) {
       >
         <div className="mb-2 flex items-start justify-between gap-2">
           <ProjectStatusBadge status={project.status} />
-          <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500" />
+          <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500 dark:text-gray-600 dark:group-hover:text-indigo-400" />
         </div>
 
-        <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900">
+        <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900 dark:text-gray-100">
           {project.title}
         </h3>
-        <p className="mb-3 line-clamp-2 flex-1 text-sm text-gray-500">
+        <p className="mb-3 line-clamp-2 flex-1 text-sm text-gray-500 dark:text-gray-400">
           {project.description}
         </p>
 
         <div
-          className={`mb-3 flex items-center gap-1.5 text-xs ${overdue ? 'text-red-500' : 'text-gray-400'}`}
+          className={`mb-3 flex items-center gap-1.5 text-xs ${overdue ? 'text-red-500 dark:text-red-400' : 'text-gray-400 dark:text-gray-500'}`}
         >
           <Calendar className="h-3.5 w-3.5" />
           {deadline.toLocaleDateString('ru-RU', {
@@ -148,7 +148,7 @@ function ProjectCard({ project }: { project: Project }) {
           </div>
         )}
 
-        <div className="flex items-center gap-1.5 text-xs text-gray-400">
+        <div className="flex items-center gap-1.5 text-xs text-gray-400 dark:text-gray-500">
           <Users className="h-3.5 w-3.5" />
           {project._count?.teams ?? 0} команд
         </div>
@@ -169,13 +169,13 @@ function TeamCard({ team, userId }: { team: TeamWithContext; userId: string }) {
       >
         <CardHeader>
           <CardTitle className="line-clamp-1">{team.name}</CardTitle>
-          <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500" />
+          <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500 dark:text-gray-600 dark:group-hover:text-indigo-400" />
         </CardHeader>
 
-        <p className="mb-3 text-sm text-gray-500 line-clamp-1">{team.projectTitle}</p>
+        <p className="mb-3 text-sm text-gray-500 line-clamp-1 dark:text-gray-400">{team.projectTitle}</p>
 
         <div className="flex flex-wrap items-center gap-2">
-          <div className="flex items-center gap-1 text-xs text-gray-400">
+          <div className="flex items-center gap-1 text-xs text-gray-400 dark:text-gray-500">
             <Users className="h-3.5 w-3.5" />
             {memberCount} участников
           </div>
@@ -187,13 +187,13 @@ function TeamCard({ team, userId }: { team: TeamWithContext; userId: string }) {
             <div
               key={m.userId}
               title={m.user?.fullName}
-              className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-indigo-100 text-xs font-semibold text-indigo-700"
+              className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-indigo-100 text-xs font-semibold text-indigo-700 dark:border-gray-800 dark:bg-indigo-900/40 dark:text-indigo-300"
             >
               {m.user?.fullName?.[0] ?? '?'}
             </div>
           ))}
           {memberCount > 5 && (
-            <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs text-gray-500">
+            <div className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-gray-100 text-xs text-gray-500 dark:border-gray-800 dark:bg-gray-700 dark:text-gray-400">
               +{memberCount - 5}
             </div>
           )}
@@ -264,7 +264,7 @@ function StudentDashboard({ user }: { user: User }) {
     <div className="space-y-10">
       {/* My teams */}
       <section>
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">Мои команды</h2>
+        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">Мои команды</h2>
         {myTeams.length === 0 ? (
           <EmptyState
             icon={Users}
@@ -290,9 +290,9 @@ function StudentDashboard({ user }: { user: User }) {
       {recommendations.length > 0 && (
         <section>
           <div className="mb-4 flex items-center gap-2">
-            <Sparkles className="h-4 w-4 text-indigo-500" />
-            <h2 className="text-lg font-semibold text-gray-900">Рекомендуемые проекты</h2>
-            <span className="ml-1 rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-600">
+            <Sparkles className="h-4 w-4 text-indigo-500 dark:text-indigo-400" />
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Рекомендуемые проекты</h2>
+            <span className="ml-1 rounded-full bg-indigo-50 px-2 py-0.5 text-xs font-medium text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-300">
               по вашим навыкам
             </span>
           </div>
@@ -305,18 +305,18 @@ function StudentDashboard({ user }: { user: User }) {
                 >
                   <div className="mb-2 flex items-start justify-between gap-2">
                     <ProjectStatusBadge status={project.status} />
-                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500" />
+                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500 dark:text-gray-600 dark:group-hover:text-indigo-400" />
                   </div>
 
-                  <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900">
+                  <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900 dark:text-gray-100">
                     {project.title}
                   </h3>
-                  <p className="mb-3 line-clamp-2 flex-1 text-sm text-gray-500">
+                  <p className="mb-3 line-clamp-2 flex-1 text-sm text-gray-500 dark:text-gray-400">
                     {project.description}
                   </p>
 
                   <div className="mb-3">
-                    <p className="mb-1 text-xs text-gray-400">Совпадение навыков</p>
+                    <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">Совпадение навыков</p>
                     <MatchScoreBar score={score} matchedSkills={matchedSkills} />
                   </div>
 
@@ -339,7 +339,7 @@ function StudentDashboard({ user }: { user: User }) {
 
       {/* Available projects */}
       <section>
-        <h2 className="mb-4 text-lg font-semibold text-gray-900">
+        <h2 className="mb-4 text-lg font-semibold text-gray-900 dark:text-gray-100">
           Доступные проекты
         </h2>
         {projects.length === 0 ? (
@@ -369,12 +369,12 @@ function StatTile({
 }) {
   return (
     <Card padding="md" className="flex items-center gap-4">
-      <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-50">
-        <Icon className="h-5 w-5 text-indigo-600" />
+      <div className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-xl bg-indigo-50 dark:bg-indigo-900/30">
+        <Icon className="h-5 w-5 text-indigo-600 dark:text-indigo-400" />
       </div>
       <div>
-        <p className="text-2xl font-bold text-gray-900">{value}</p>
-        <p className="text-sm text-gray-500">{label}</p>
+        <p className="text-2xl font-bold text-gray-900 dark:text-gray-100">{value}</p>
+        <p className="text-sm text-gray-500 dark:text-gray-400">{label}</p>
       </div>
     </Card>
   );
@@ -409,7 +409,7 @@ function TeacherDashboard() {
       {/* Projects */}
       <section>
         <div className="mb-4 flex items-center justify-between">
-          <h2 className="text-lg font-semibold text-gray-900">Мои проекты</h2>
+          <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">Мои проекты</h2>
           <Link href="/projects/new">
             <Button size="sm">
               <Plus className="h-4 w-4" />
@@ -460,8 +460,8 @@ export default function DashboardPage() {
   return (
     <>
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-gray-900">Привет, {greeting}!</h1>
-        <p className="mt-1 text-sm text-gray-500">{subtitle[user.role]}</p>
+        <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Привет, {greeting}!</h1>
+        <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{subtitle[user.role]}</p>
       </div>
 
       {user.role === 'STUDENT' && <StudentDashboard user={user} />}

@@ -28,8 +28,8 @@ export function AuthGuard({ children, roles }: AuthGuardProps) {
 
   if (loading) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gray-50">
-        <Loader2 className="h-8 w-8 animate-spin text-indigo-500" />
+      <div className="flex min-h-screen items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <Loader2 className="h-8 w-8 animate-spin text-indigo-500 dark:text-indigo-400" />
       </div>
     );
   }

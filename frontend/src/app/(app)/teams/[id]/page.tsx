@@ -73,16 +73,16 @@ export default function TeamDetailPage() {
   if (loading) {
     return (
       <div className="mx-auto max-w-6xl">
-        <div className="mb-6 h-4 w-64 animate-pulse rounded bg-gray-200" />
-        <div className="mb-6 h-8 w-48 animate-pulse rounded bg-gray-200" />
+        <div className="mb-6 h-4 w-64 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+        <div className="mb-6 h-8 w-48 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
         <div className="grid gap-6 lg:grid-cols-[280px,1fr]">
-          <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3">
+          <div className="rounded-xl border border-gray-200 bg-white p-5 shadow-sm space-y-3 dark:border-gray-700 dark:bg-gray-800 dark:shadow-none">
             {[0, 1, 2, 3].map((i) => (
               <div key={i} className="flex items-center gap-2">
-                <div className="h-8 w-8 flex-shrink-0 animate-pulse rounded-full bg-gray-200" />
+                <div className="h-8 w-8 flex-shrink-0 animate-pulse rounded-full bg-gray-200 dark:bg-gray-700" />
                 <div className="flex-1 space-y-1">
-                  <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200" />
-                  <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200" />
+                  <div className="h-4 w-3/4 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
+                  <div className="h-3 w-1/2 animate-pulse rounded bg-gray-200 dark:bg-gray-700" />
                 </div>
               </div>
             ))}
@@ -161,26 +161,26 @@ export default function TeamDetailPage() {
     <>
       <div className="mx-auto max-w-6xl">
         {/* Breadcrumbs */}
-        <nav className="mb-6 flex items-center gap-1.5 text-sm text-gray-500">
-          <Link href="/dashboard" className="hover:text-gray-800 transition-colors">
+        <nav className="mb-6 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+          <Link href="/dashboard" className="hover:text-gray-800 transition-colors dark:hover:text-gray-200">
             Dashboard
           </Link>
           <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" />
           <Link
             href={`/projects/${team.projectId}`}
-            className="hover:text-gray-800 transition-colors line-clamp-1 max-w-[180px]"
+            className="hover:text-gray-800 transition-colors line-clamp-1 max-w-[180px] dark:hover:text-gray-200"
           >
             {team.project?.title ?? 'Проект'}
           </Link>
           <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" />
-          <span className="font-medium text-gray-900 line-clamp-1 max-w-[180px]">
+          <span className="font-medium text-gray-900 line-clamp-1 max-w-[180px] dark:text-gray-200">
             {team.name}
           </span>
         </nav>
 
         {/* Read-only banner */}
         {isReadOnly && (
-          <div className="mb-6 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800">
+          <div className="mb-6 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-800 dark:border-amber-700/50 dark:bg-amber-900/20 dark:text-amber-300">
             <Lock className="h-4 w-4 flex-shrink-0" />
             <span>
               Этот проект{' '}
@@ -193,8 +193,8 @@ export default function TeamDetailPage() {
         {/* Team header */}
         <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">{team.name}</h1>
-            <p className="mt-1 text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">{team.name}</h1>
+            <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
               {team.members.length} участников · {tasks.length} задач
             </p>
           </div>
@@ -219,8 +219,8 @@ export default function TeamDetailPage() {
           <aside>
             <Card padding="md">
               <div className="mb-3 flex items-center gap-2">
-                <Users className="h-4 w-4 text-gray-500" />
-                <h2 className="text-sm font-semibold text-gray-900">Участники</h2>
+                <Users className="h-4 w-4 text-gray-500 dark:text-gray-400" />
+                <h2 className="text-sm font-semibold text-gray-900 dark:text-gray-100">Участники</h2>
               </div>
               <ul className="space-y-3">
                 {team.members.map((m) => {
@@ -232,18 +232,18 @@ export default function TeamDetailPage() {
                       className="flex items-center justify-between gap-2"
                     >
                       <div className="flex min-w-0 items-center gap-2">
-                        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700">
+                        <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
                           {m.user?.fullName?.[0] ?? '?'}
                         </div>
                         <div className="min-w-0">
-                          <p className="truncate text-sm font-medium text-gray-900">
+                          <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">
                             {m.user?.fullName ?? 'Неизвестно'}
                             {isMe && (
-                              <span className="ml-1 text-xs text-gray-400">(вы)</span>
+                              <span className="ml-1 text-xs text-gray-400 dark:text-gray-500">(вы)</span>
                             )}
                           </p>
                           {isThisLeader && (
-                            <div className="flex items-center gap-1 text-xs text-amber-600">
+                            <div className="flex items-center gap-1 text-xs text-amber-600 dark:text-amber-400">
                               <Crown className="h-3 w-3" />
                               Лидер
                             </div>
@@ -255,7 +255,7 @@ export default function TeamDetailPage() {
                           onClick={() =>
                             handleKick(m.userId, m.user?.fullName ?? 'участника')
                           }
-                          className="flex-shrink-0 rounded p-1 text-gray-300 hover:bg-red-50 hover:text-red-500 transition-colors"
+                          className="flex-shrink-0 rounded p-1 text-gray-300 hover:bg-red-50 hover:text-red-500 transition-colors dark:text-gray-500 dark:hover:bg-red-900/30 dark:hover:text-red-400"
                           title="Исключить"
                         >
                           <UserMinus className="h-4 w-4" />
@@ -267,11 +267,11 @@ export default function TeamDetailPage() {
               </ul>
 
               {isLeader && (
-                <div className="mt-4 rounded-lg bg-indigo-50 p-3">
-                  <p className="mb-1 text-xs font-medium text-indigo-700">
+                <div className="mt-4 rounded-lg bg-indigo-50 p-3 dark:bg-indigo-900/30">
+                  <p className="mb-1 text-xs font-medium text-indigo-700 dark:text-indigo-300">
                     Код приглашения
                   </p>
-                  <p className="font-mono text-base font-bold tracking-widest text-indigo-900">
+                  <p className="font-mono text-base font-bold tracking-widest text-indigo-900 dark:text-indigo-200">
                     {team.inviteCode}
                   </p>
                 </div>
@@ -280,7 +280,7 @@ export default function TeamDetailPage() {
               {team.members[0]?.user?.skills &&
                 team.members.flatMap((m) => m.user?.skills ?? []).length > 0 && (
                   <div className="mt-4">
-                    <p className="mb-2 text-xs font-medium text-gray-500">
+                    <p className="mb-2 text-xs font-medium text-gray-500 dark:text-gray-400">
                       Навыки команды
                     </p>
                     <div className="flex flex-wrap gap-1">

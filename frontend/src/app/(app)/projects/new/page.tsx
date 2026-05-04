@@ -67,7 +67,7 @@ export default function NewProjectPage() {
       {/* Back link */}
       <Link
         href="/dashboard"
-        className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors"
+        className="mb-6 inline-flex items-center gap-1.5 text-sm text-gray-500 hover:text-gray-800 transition-colors dark:text-gray-400 dark:hover:text-gray-200"
       >
         <ArrowLeft className="h-4 w-4" />
         Назад к Dashboard
@@ -75,8 +75,8 @@ export default function NewProjectPage() {
 
       <Card padding="lg">
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Новый проект</h1>
-          <p className="mt-1 text-sm text-gray-500">
+          <h1 className="text-2xl font-bold text-gray-900 dark:text-gray-100">Новый проект</h1>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">
             Заполните информацию о проекте. Студенты смогут найти его и вступить в команды.
           </p>
         </div>
@@ -117,7 +117,7 @@ export default function NewProjectPage() {
           />
 
           {/* Divider */}
-          <hr className="border-gray-200" />
+          <hr className="border-gray-200 dark:border-gray-700" />
 
           <div className="flex items-center justify-end gap-3">
             <Link href="/dashboard">

@@ -148,11 +148,11 @@ export function TaskModal({
         />
 
         <div className="flex flex-col gap-1">
-          <label className="text-sm font-medium text-gray-700">Исполнитель</label>
+          <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Исполнитель</label>
           <select
             value={assigneeId}
             onChange={(e) => setAssigneeId(e.target.value)}
-            className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+            className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
           >
             <option value="">— Не назначен —</option>
             {members.map((m) => (
@@ -165,11 +165,11 @@ export function TaskModal({
 
         {editing && (
           <div className="flex flex-col gap-1">
-            <label className="text-sm font-medium text-gray-700">Статус</label>
+            <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Статус</label>
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as TaskStatus)}
-              className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700"
+              className="rounded-lg border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-primary-700 focus:outline-none focus:ring-1 focus:ring-primary-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-100"
             >
               {(Object.keys(STATUS_LABELS) as TaskStatus[]).map((s) => (
                 <option key={s} value={s}>{STATUS_LABELS[s]}</option>

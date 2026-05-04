@@ -55,7 +55,7 @@ function InviteCodeBadge({ code }: { code: string }) {
   return (
     <button
       onClick={copy}
-      className="flex items-center gap-1.5 rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-mono font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors"
+      className="flex items-center gap-1.5 rounded-lg bg-indigo-50 px-2.5 py-1 text-xs font-mono font-semibold text-indigo-700 hover:bg-indigo-100 transition-colors dark:bg-indigo-900/30 dark:text-indigo-300 dark:hover:bg-indigo-900/50"
       title="Скопировать код приглашения"
     >
       {code}
@@ -92,17 +92,17 @@ function TeamCard({
               <div
                 key={m.userId}
                 title={m.user?.fullName}
-                className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-indigo-100 text-xs font-semibold text-indigo-700"
+                className="flex h-7 w-7 items-center justify-center rounded-full border-2 border-white bg-indigo-100 text-xs font-semibold text-indigo-700 dark:border-gray-800 dark:bg-indigo-900/40 dark:text-indigo-300"
               >
                 {m.user?.fullName?.[0] ?? '?'}
               </div>
             ))}
           </div>
-          <span className="text-xs text-gray-500">
+          <span className="text-xs text-gray-500 dark:text-gray-400">
             {team.members.length} участников
           </span>
           {team._count && (
-            <span className="text-xs text-gray-400">
+            <span className="text-xs text-gray-400 dark:text-gray-500">
               {team._count.tasks} задач
             </span>
           )}
@@ -299,12 +299,12 @@ export default function ProjectDetailPage() {
   return (
     <>
       <div className="mx-auto max-w-4xl">
-        <nav className="mb-6 flex items-center gap-1.5 text-sm text-gray-500">
-          <Link href="/dashboard" className="hover:text-gray-800 transition-colors">
+        <nav className="mb-6 flex items-center gap-1.5 text-sm text-gray-500 dark:text-gray-400">
+          <Link href="/dashboard" className="hover:text-gray-800 transition-colors dark:hover:text-gray-200">
             Dashboard
           </Link>
           <ChevronRight className="h-3.5 w-3.5 flex-shrink-0" />
-          <span className="font-medium text-gray-900 line-clamp-1 max-w-[260px]">
+          <span className="font-medium text-gray-900 line-clamp-1 max-w-[260px] dark:text-gray-200">
             {project.title}
           </span>
         </nav>
@@ -370,11 +370,11 @@ export default function ProjectDetailPage() {
             )}
           </div>
 
-          <h1 className="mb-2 text-2xl font-bold text-gray-900">{project.title}</h1>
-          <p className="mb-4 text-sm text-gray-600">{project.description}</p>
+          <h1 className="mb-2 text-2xl font-bold text-gray-900 dark:text-gray-100">{project.title}</h1>
+          <p className="mb-4 text-sm text-gray-600 dark:text-gray-300">{project.description}</p>
 
-          <div className="flex flex-wrap gap-4 text-sm text-gray-500">
-            <div className={`flex items-center gap-1.5 ${overdue ? 'text-red-500' : ''}`}>
+          <div className="flex flex-wrap gap-4 text-sm text-gray-500 dark:text-gray-400">
+            <div className={`flex items-center gap-1.5 ${overdue ? 'text-red-500 dark:text-red-400' : ''}`}>
               <Calendar className="h-4 w-4" />
               {deadline.toLocaleDateString('ru-RU', {
                 day: 'numeric',
@@ -400,13 +400,13 @@ export default function ProjectDetailPage() {
 
         {/* Tab bar — only for owner */}
         {isOwner && (
-          <div className="mb-6 flex gap-1 rounded-xl bg-gray-100 p-1">
+          <div className="mb-6 flex gap-1 rounded-xl bg-gray-100 p-1 dark:bg-gray-800">
             <button
               onClick={() => setActiveTab('teams')}
               className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                 activeTab === 'teams'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:shadow-none'
+                  : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
               }`}
             >
               <Users className="h-4 w-4" />
@@ -416,8 +416,8 @@ export default function ProjectDetailPage() {
               onClick={handleStudentsTab}
               className={`flex flex-1 items-center justify-center gap-1.5 rounded-lg px-4 py-2 text-sm font-medium transition-colors ${
                 activeTab === 'students'
-                  ? 'bg-white text-gray-900 shadow-sm'
-                  : 'text-gray-500 hover:text-gray-700'
+                  ? 'bg-white text-gray-900 shadow-sm dark:bg-gray-700 dark:text-gray-100 dark:shadow-none'
+                  : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200'
               }`}
             >
               <UserSearch className="h-4 w-4" />
@@ -431,7 +431,7 @@ export default function ProjectDetailPage() {
           <section>
             <div className="mb-4 flex items-center justify-between">
               {!isOwner && (
-                <h2 className="text-lg font-semibold text-gray-900">
+                <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100">
                   Команды ({project.teams.length})
                 </h2>
               )}
@@ -455,8 +455,8 @@ export default function ProjectDetailPage() {
 
             {project.teams.length === 0 ? (
               <Card className="flex flex-col items-center justify-center py-14 text-center">
-                <Users className="mb-3 h-10 w-10 text-gray-300" />
-                <p className="mb-4 text-sm text-gray-500">Команд пока нет</p>
+                <Users className="mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
+                <p className="mb-4 text-sm text-gray-500 dark:text-gray-400">Команд пока нет</p>
                 {isStudent && project.status === 'ACTIVE' && !isMemberAnywhere && (
                   <Button size="sm" onClick={() => setCreateOpen(true)}>
                     <Plus className="h-3.5 w-3.5" />
@@ -479,12 +479,12 @@ export default function ProjectDetailPage() {
           <section>
             {suggestionsLoading ? (
               <div className="flex items-center justify-center py-20">
-                <Loader2 className="h-7 w-7 animate-spin text-indigo-400" />
+                <Loader2 className="h-7 w-7 animate-spin text-indigo-400 dark:text-indigo-300" />
               </div>
             ) : suggestions.length === 0 ? (
               <Card className="flex flex-col items-center justify-center py-14 text-center">
-                <UserSearch className="mb-3 h-10 w-10 text-gray-300" />
-                <p className="text-sm text-gray-500">
+                <UserSearch className="mb-3 h-10 w-10 text-gray-300 dark:text-gray-600" />
+                <p className="text-sm text-gray-500 dark:text-gray-400">
                   Студентов с подходящими навыками не найдено
                 </p>
               </Card>
@@ -494,18 +494,18 @@ export default function ProjectDetailPage() {
                   <Card key={s.id} padding="md" className="flex flex-col gap-3 sm:flex-row sm:items-center">
                     {/* Avatar + name */}
                     <div className="flex items-center gap-3 sm:w-48">
-                      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700">
+                      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
                         {s.fullName[0]}
                       </div>
                       <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-gray-900">{s.fullName}</p>
-                        <p className="truncate text-xs text-gray-400">{s.email}</p>
+                        <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{s.fullName}</p>
+                        <p className="truncate text-xs text-gray-400 dark:text-gray-500">{s.email}</p>
                       </div>
                     </div>
 
                     {/* Match bar */}
                     <div className="flex-1">
-                      <p className="mb-1 text-xs text-gray-400">
+                      <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">
                         Совпадение{activeTeamCount > 0 ? ` · ${activeTeamCount} активных команд` : ''}
                       </p>
                       <MatchScoreBar score={adjustedScore} matchedSkills={matchedSkills} />
@@ -518,7 +518,7 @@ export default function ProjectDetailPage() {
                           <Badge key={sk} variant="success">{sk}</Badge>
                         ))
                       ) : (
-                        <span className="text-xs text-gray-400">нет совпадений</span>
+                        <span className="text-xs text-gray-400 dark:text-gray-500">нет совпадений</span>
                       )}
                       {matchedSkills.length > 4 && (
                         <Badge variant="default">+{matchedSkills.length - 4}</Badge>
