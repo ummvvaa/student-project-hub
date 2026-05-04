@@ -23,7 +23,9 @@ function BreadcrumbLink({ item, isLast }: { item: BreadcrumbItem; isLast: boolea
   return <span className="text-gray-600">{item.label}</span>;
 }
 
-const SEP = <ChevronRight className="h-3.5 w-3.5 flex-shrink-0 text-gray-300" />;
+function Sep() {
+  return <ChevronRight className="h-3.5 w-3.5 flex-shrink-0 text-gray-300" />;
+}
 
 export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
   if (items.length === 0) return null;
@@ -40,7 +42,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
         {/* Desktop-only prefix items */}
         {desktopOnly.map((item, idx) => (
           <Fragment key={`d${idx}`}>
-            {idx > 0 && <span className="hidden sm:block">{SEP}</span>}
+            {idx > 0 && <span className="hidden sm:block"><Sep /></span>}
             <span className="hidden sm:block">
               <BreadcrumbLink item={item} isLast={false} />
             </span>
@@ -49,14 +51,14 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
 
         {/* Separator after prefix items — desktop only */}
         {desktopOnly.length > 0 && (
-          <span className="hidden sm:block">{SEP}</span>
+          <span className="hidden sm:block"><Sep /></span>
         )}
 
         {/* Ellipsis — mobile only */}
         {hasCollapse && (
           <>
             <span className="text-gray-400 sm:hidden select-none">…</span>
-            <span className="sm:hidden">{SEP}</span>
+            <span className="sm:hidden"><Sep /></span>
           </>
         )}
 
@@ -65,7 +67,7 @@ export function Breadcrumbs({ items }: { items: BreadcrumbItem[] }) {
           const isLast = idx === alwaysVisible.length - 1;
           return (
             <Fragment key={`v${idx}`}>
-              {idx > 0 && SEP}
+              {idx > 0 && <Sep />}
               <BreadcrumbLink item={item} isLast={isLast} />
             </Fragment>
           );
