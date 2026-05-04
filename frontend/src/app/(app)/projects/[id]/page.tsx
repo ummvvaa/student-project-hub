@@ -28,6 +28,7 @@ import { Modal } from '../../../../components/ui/Modal';
 import { MatchScoreBar } from '../../../../components/MatchScoreBar';
 import { ProjectCardSkeleton } from '../../../../components/skeletons/ProjectCardSkeleton';
 import { TeamCardSkeleton } from '../../../../components/skeletons/TeamCardSkeleton';
+import { AnimatedList } from '../../../../components/AnimatedList';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -466,9 +467,11 @@ export default function ProjectDetailPage() {
               </Card>
             ) : (
               <div className="grid gap-4 sm:grid-cols-2">
-                {project.teams.map((team) => (
-                  <TeamCard key={team.id} team={team} userId={user.id} />
-                ))}
+                <AnimatedList>
+                  {project.teams.map((team) => (
+                    <TeamCard key={team.id} team={team} userId={user.id} />
+                  ))}
+                </AnimatedList>
               </div>
             )}
           </section>
@@ -490,42 +493,44 @@ export default function ProjectDetailPage() {
               </Card>
             ) : (
               <div className="flex flex-col gap-3">
-                {suggestions.map(({ user: s, score, matchedSkills, activeTeamCount, adjustedScore }) => (
-                  <Card key={s.id} padding="md" className="flex flex-col gap-3 sm:flex-row sm:items-center">
-                    {/* Avatar + name */}
-                    <div className="flex items-center gap-3 sm:w-48">
-                      <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
-                        {s.fullName[0]}
+                <AnimatedList>
+                  {suggestions.map(({ user: s, matchedSkills, activeTeamCount, adjustedScore }) => (
+                    <Card key={s.id} padding="md" className="flex flex-col gap-3 sm:flex-row sm:items-center">
+                      {/* Avatar + name */}
+                      <div className="flex items-center gap-3 sm:w-48">
+                        <div className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-full bg-indigo-100 text-sm font-semibold text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+                          {s.fullName[0]}
+                        </div>
+                        <div className="min-w-0">
+                          <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{s.fullName}</p>
+                          <p className="truncate text-xs text-gray-400 dark:text-gray-500">{s.email}</p>
+                        </div>
                       </div>
-                      <div className="min-w-0">
-                        <p className="truncate text-sm font-medium text-gray-900 dark:text-gray-100">{s.fullName}</p>
-                        <p className="truncate text-xs text-gray-400 dark:text-gray-500">{s.email}</p>
+
+                      {/* Match bar */}
+                      <div className="flex-1">
+                        <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">
+                          Совпадение{activeTeamCount > 0 ? ` · ${activeTeamCount} активных команд` : ''}
+                        </p>
+                        <MatchScoreBar score={adjustedScore} matchedSkills={matchedSkills} />
                       </div>
-                    </div>
 
-                    {/* Match bar */}
-                    <div className="flex-1">
-                      <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">
-                        Совпадение{activeTeamCount > 0 ? ` · ${activeTeamCount} активных команд` : ''}
-                      </p>
-                      <MatchScoreBar score={adjustedScore} matchedSkills={matchedSkills} />
-                    </div>
-
-                    {/* Matched skills */}
-                    <div className="flex flex-wrap gap-1 sm:w-56 sm:justify-end">
-                      {matchedSkills.length > 0 ? (
-                        matchedSkills.slice(0, 4).map((sk) => (
-                          <Badge key={sk} variant="success">{sk}</Badge>
-                        ))
-                      ) : (
-                        <span className="text-xs text-gray-400 dark:text-gray-500">нет совпадений</span>
-                      )}
-                      {matchedSkills.length > 4 && (
-                        <Badge variant="default">+{matchedSkills.length - 4}</Badge>
-                      )}
-                    </div>
-                  </Card>
-                ))}
+                      {/* Matched skills */}
+                      <div className="flex flex-wrap gap-1 sm:w-56 sm:justify-end">
+                        {matchedSkills.length > 0 ? (
+                          matchedSkills.slice(0, 4).map((sk) => (
+                            <Badge key={sk} variant="success">{sk}</Badge>
+                          ))
+                        ) : (
+                          <span className="text-xs text-gray-400 dark:text-gray-500">нет совпадений</span>
+                        )}
+                        {matchedSkills.length > 4 && (
+                          <Badge variant="default">+{matchedSkills.length - 4}</Badge>
+                        )}
+                      </div>
+                    </Card>
+                  ))}
+                </AnimatedList>
               </div>
             )}
           </section>

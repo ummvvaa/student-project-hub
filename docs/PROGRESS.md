@@ -53,7 +53,22 @@
 
 ---
 
-## 2. Что сделано (промпты 1–12, 14, 16–25, ICS-import)
+## 2. Что сделано (промпты 1–12, 14, 16–26, ICS-import)
+
+### Промпт 26 — Анимации переходов и stagger-списки
+
+**Frontend:**
+- Установлен `framer-motion`
+- `src/components/PageTransition.tsx` — client-компонент, оборачивает `children` в `motion.div` с `initial={{ opacity: 0, y: 10 }}`, `animate={{ opacity: 1, y: 0 }}`, `transition={{ duration: 0.2, ease: 'easeOut' }}`. Fade-in + лёгкий slide вверх при смене страниц.
+- `src/app/(app)/layout.tsx` — `<main>` обёрнут в `<PageTransition>`, анимация применяется ко всем страницам приложения.
+- `src/components/AnimatedList.tsx` — client-компонент, использует `React.Children.map` для обхода дочерних элементов. Каждый ребёнок оборачивается в `motion.div` со stagger-задержкой `delay: i * 0.05` (волна появления). Принимает опциональный `className` для `motion.div`-обёртки.
+- `AnimatedList` применён к спискам:
+  - `dashboard/page.tsx` — сетка "Мои команды", сетка "Рекомендуемые проекты", сетка "Доступные проекты" (StudentDashboard), сетка "Мои проекты" (TeacherDashboard). Все с `className="h-full"` для корректной высоты card-ов в grid.
+  - `teams/page.tsx` — сетка команд
+  - `archive/page.tsx` — сетка архивных команд
+  - `projects/[id]/page.tsx` — сетка команд проекта, список студентов-рекомендаций (вкладка "Студенты")
+- **НЕ** затронуты: `KanbanBoard`, `TaskCard` (конфликт с dnd-kit), модалки
+- Ограничения анимаций: max 300ms, только fade + y-shift (без scale/rotate)
 
 ### Промпт 25 — Тёмная тема
 

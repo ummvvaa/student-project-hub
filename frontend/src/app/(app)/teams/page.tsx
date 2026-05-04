@@ -12,6 +12,7 @@ import { Card } from '../../../components/ui/Card';
 import { Badge } from '../../../components/ui/Badge';
 import { Button } from '../../../components/ui/Button';
 import { TeamCardSkeleton } from '../../../components/skeletons/TeamCardSkeleton';
+import { AnimatedList } from '../../../components/AnimatedList';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -221,9 +222,11 @@ export default function TeamsPage() {
         </div>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-          {teams.map((team) => (
-            <TeamCard key={team.id} team={team} currentUserId={user?.id ?? ''} />
-          ))}
+          <AnimatedList>
+            {teams.map((team) => (
+              <TeamCard key={team.id} team={team} currentUserId={user?.id ?? ''} />
+            ))}
+          </AnimatedList>
         </div>
       )}
     </div>

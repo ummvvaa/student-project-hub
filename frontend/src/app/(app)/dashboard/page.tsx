@@ -22,6 +22,7 @@ import { Card, CardHeader, CardTitle } from '../../../components/ui/Card';
 import { MatchScoreBar } from '../../../components/MatchScoreBar';
 import { ProjectCardSkeleton } from '../../../components/skeletons/ProjectCardSkeleton';
 import { TeamCardSkeleton } from '../../../components/skeletons/TeamCardSkeleton';
+import { AnimatedList } from '../../../components/AnimatedList';
 import { Project, Team, TeamMember, User, ApiError, ProjectRecommendation } from '../../../types';
 
 // ─── Local extended types ─────────────────────────────────────────────────────
@@ -279,9 +280,11 @@ function StudentDashboard({ user }: { user: User }) {
           />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {myTeams.map((t) => (
-              <TeamCard key={t.id} team={t} userId={user.id} />
-            ))}
+            <AnimatedList className="h-full">
+              {myTeams.map((t) => (
+                <TeamCard key={t.id} team={t} userId={user.id} />
+              ))}
+            </AnimatedList>
           </div>
         )}
       </section>
@@ -297,42 +300,44 @@ function StudentDashboard({ user }: { user: User }) {
             </span>
           </div>
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {recommendations.map(({ project, score, matchedSkills }) => (
-              <Link key={project.id} href={`/projects/${project.id}`} className="block h-full">
-                <Card
-                  padding="md"
-                  className="group flex h-full cursor-pointer flex-col transition-shadow hover:shadow-md"
-                >
-                  <div className="mb-2 flex items-start justify-between gap-2">
-                    <ProjectStatusBadge status={project.status} />
-                    <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500 dark:text-gray-600 dark:group-hover:text-indigo-400" />
-                  </div>
-
-                  <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900 dark:text-gray-100">
-                    {project.title}
-                  </h3>
-                  <p className="mb-3 line-clamp-2 flex-1 text-sm text-gray-500 dark:text-gray-400">
-                    {project.description}
-                  </p>
-
-                  <div className="mb-3">
-                    <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">Совпадение навыков</p>
-                    <MatchScoreBar score={score} matchedSkills={matchedSkills} />
-                  </div>
-
-                  {matchedSkills.length > 0 && (
-                    <div className="flex flex-wrap gap-1">
-                      {matchedSkills.slice(0, 3).map((s) => (
-                        <Badge key={s} variant="success">{s}</Badge>
-                      ))}
-                      {matchedSkills.length > 3 && (
-                        <Badge variant="default">+{matchedSkills.length - 3}</Badge>
-                      )}
+            <AnimatedList className="h-full">
+              {recommendations.map(({ project, score, matchedSkills }) => (
+                <Link key={project.id} href={`/projects/${project.id}`} className="block h-full">
+                  <Card
+                    padding="md"
+                    className="group flex h-full cursor-pointer flex-col transition-shadow hover:shadow-md"
+                  >
+                    <div className="mb-2 flex items-start justify-between gap-2">
+                      <ProjectStatusBadge status={project.status} />
+                      <ChevronRight className="h-4 w-4 flex-shrink-0 text-gray-300 transition-colors group-hover:text-indigo-500 dark:text-gray-600 dark:group-hover:text-indigo-400" />
                     </div>
-                  )}
-                </Card>
-              </Link>
-            ))}
+
+                    <h3 className="mb-1 line-clamp-2 font-semibold text-gray-900 dark:text-gray-100">
+                      {project.title}
+                    </h3>
+                    <p className="mb-3 line-clamp-2 flex-1 text-sm text-gray-500 dark:text-gray-400">
+                      {project.description}
+                    </p>
+
+                    <div className="mb-3">
+                      <p className="mb-1 text-xs text-gray-400 dark:text-gray-500">Совпадение навыков</p>
+                      <MatchScoreBar score={score} matchedSkills={matchedSkills} />
+                    </div>
+
+                    {matchedSkills.length > 0 && (
+                      <div className="flex flex-wrap gap-1">
+                        {matchedSkills.slice(0, 3).map((s) => (
+                          <Badge key={s} variant="success">{s}</Badge>
+                        ))}
+                        {matchedSkills.length > 3 && (
+                          <Badge variant="default">+{matchedSkills.length - 3}</Badge>
+                        )}
+                      </div>
+                    )}
+                  </Card>
+                </Link>
+              ))}
+            </AnimatedList>
           </div>
         </section>
       )}
@@ -346,9 +351,11 @@ function StudentDashboard({ user }: { user: User }) {
           <EmptyState icon={FolderOpen} text="Активных проектов нет" />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p) => (
-              <ProjectCard key={p.id} project={p} />
-            ))}
+            <AnimatedList className="h-full">
+              {projects.map((p) => (
+                <ProjectCard key={p.id} project={p} />
+              ))}
+            </AnimatedList>
           </div>
         )}
       </section>
@@ -433,9 +440,11 @@ function TeacherDashboard() {
           />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {projects.map((p) => (
-              <ProjectCard key={p.id} project={p} />
-            ))}
+            <AnimatedList className="h-full">
+              {projects.map((p) => (
+                <ProjectCard key={p.id} project={p} />
+              ))}
+            </AnimatedList>
           </div>
         )}
       </section>
