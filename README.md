@@ -174,7 +174,7 @@ A few non-obvious choices worth calling out:
 ### 1. Clone and start the database
 
 ```bash
-git clone https://github.com/<your-github-username>/student-project-hub.git
+git clone https://github.com/ummvvaa/student-project-hub.git
 cd student-project-hub
 docker compose up -d
 ```
