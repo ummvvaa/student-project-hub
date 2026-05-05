@@ -47,20 +47,19 @@ I built Student Project Hub to explore what a focused, opinionated project manag
 
 | Login | Student Dashboard |
 |-------|-------------------|
-| ![Login](docs/screenshots/Login page.png) | ![Dashboard Student](docs/screenshots/Dashboard (Student).png) |
+| ![Login](docs/screenshots/01-login.png) | ![Dashboard Student](docs/screenshots/02-dashboard-student.png) |
 
 | Project page | Kanban board |
 |--------------|--------------|
-| ![Project](docs/screenshots/Project page.png) | ![Kanban](docs/screenshots/Kanban board .png) |
+| ![Project](docs/screenshots/03-project.png) | ![Kanban](docs/screenshots/04-kanban.png) |
 
 | AI Roadmap Generator | Gamification |
-|----------------------|-------------|
-| ![AI Roadmap](docs/screenshots/AI_Roadmap_modal.png) | 
-![Gamification](docs/screenshots/Gamification.png) |
+|----------------------|--------------|
+| ![AI Roadmap](docs/screenshots/05-ai-roadmap.png) | ![Gamification](docs/screenshots/06-gamification.png) |
 
-| Profile with gamification | Dark mode |
-|---------------------------|-----------|
-| ![Profile](docs/screenshots/Profile page.png) | ![Dark mode](docs/screenshots/Dark theme.png) |
+| Profile | Dark mode |
+|---------|-----------|
+| ![Profile](docs/screenshots/07-profile.png) | ![Dark mode](docs/screenshots/08-dark-mode.png) |
 
 ---
 
