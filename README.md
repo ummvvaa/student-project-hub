@@ -53,9 +53,10 @@ I built Student Project Hub to explore what a focused, opinionated project manag
 |--------------|--------------|
 | ![Project](docs/screenshots/Project page.png) | ![Kanban](docs/screenshots/Kanban board .png) |
 
-| AI Roadmap Generator | Peer Review |
+| AI Roadmap Generator | Gamification |
 |----------------------|-------------|
-| ![AI Roadmap](docs/screenshots/AI Roadmap modal.png) | ![Gamification](docs/screenshots/Gamification.png) |
+| ![AI Roadmap](docs/screenshots/AI_Roadmap_modal.png) | 
+![Gamification](docs/screenshots/Gamification.png) |
 
 | Profile with gamification | Dark mode |
 |---------------------------|-----------|
