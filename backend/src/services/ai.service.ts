@@ -1,4 +1,4 @@
-import { GoogleGenerativeAI } from '@google/generative-ai';
+import Groq from 'groq-sdk';
 
 export interface RoadmapStep {
   title: string;
@@ -6,10 +6,10 @@ export interface RoadmapStep {
   estimatedDays: number;
 }
 
-function getClient(): GoogleGenerativeAI {
-  const key = process.env.GEMINI_API_KEY;
-  if (!key) throw new Error('GEMINI_API_KEY is not set');
-  return new GoogleGenerativeAI(key);
+function getClient(): Groq {
+  const key = process.env.GROQ_API_KEY;
+  if (!key) throw new Error('GROQ_API_KEY is not set');
+  return new Groq({ apiKey: key });
 }
 
 function extractJson(raw: string): string {
@@ -25,7 +25,6 @@ export async function generateRoadmap(project: {
   deadline: string;
 }): Promise<RoadmapStep[]> {
   const client = getClient();
-  const model = client.getGenerativeModel({ model: 'gemini-1.5-flash' });
 
   const deadlineStr = new Date(project.deadline).toLocaleDateString('ru-RU', {
     day: 'numeric',
@@ -41,24 +40,49 @@ export async function generateRoadmap(project: {
 
   let raw: string;
   try {
-    const result = await model.generateContent(prompt);
-    raw = result.response.text();
+    const completion = await client.chat.completions.create({
+      model: 'llama-3.3-70b-versatile',
+      messages: [
+        {
+          role: 'system',
+          content: 'Ты помощник по управлению студенческими проектами. Отвечай ТОЛЬКО валидным JSON без markdown-обёрток.',
+        },
+        {
+          role: 'user',
+          content: prompt,
+        },
+      ],
+      response_format: { type: 'json_object' },
+      temperature: 0.7,
+    });
+    raw = completion.choices[0]?.message?.content ?? '';
   } catch (err: unknown) {
+    console.error('=== GROQ AI ERROR ===');
+    console.error(err);
+    console.error('====================');
+
     const msg = err instanceof Error ? err.message : String(err);
-    // Surface rate-limit errors distinctly
-    if (msg.toLowerCase().includes('quota') || msg.toLowerCase().includes('rate')) {
-      throw new Error('Gemini rate limit exceeded — попробуйте позже');
+    if (msg.toLowerCase().includes('429') || msg.toLowerCase().includes('rate') || msg.toLowerCase().includes('quota')) {
+      throw new Error('AI rate limit exceeded — попробуйте позже');
     }
-    throw new Error(`Gemini API error: ${msg}`);
+    throw new Error(`AI API error: ${msg}`);
   }
 
   let steps: RoadmapStep[];
   try {
     const json = extractJson(raw);
     const parsed = JSON.parse(json) as unknown;
-    if (!Array.isArray(parsed)) throw new Error('Expected array');
 
-    steps = (parsed as Record<string, unknown>[]).map((item, i) => {
+    // Groq json_object mode may wrap the array in a root key
+    const arr = Array.isArray(parsed)
+      ? parsed
+      : Array.isArray((parsed as Record<string, unknown>).steps)
+        ? (parsed as Record<string, unknown>).steps
+        : Object.values(parsed as Record<string, unknown>).find(Array.isArray);
+
+    if (!Array.isArray(arr)) throw new Error('Expected array');
+
+    steps = (arr as Record<string, unknown>[]).map((item, i) => {
       if (
         typeof item.title !== 'string' ||
         typeof item.description !== 'string' ||
@@ -74,7 +98,7 @@ export async function generateRoadmap(project: {
     });
   } catch (parseErr: unknown) {
     const msg = parseErr instanceof Error ? parseErr.message : String(parseErr);
-    throw new Error(`Failed to parse Gemini response: ${msg}. Raw: ${raw.slice(0, 200)}`);
+    throw new Error(`Failed to parse AI response: ${msg}. Raw: ${raw.slice(0, 200)}`);
   }
 
   return steps;

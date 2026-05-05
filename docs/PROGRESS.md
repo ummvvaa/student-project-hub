@@ -23,6 +23,7 @@
 | zod | ^3.23.8 | Runtime-валидация входных данных |
 | dotenv | ^16.4.5 | Загрузка .env через `import 'dotenv/config'` |
 | cors | ^2.8.5 | CORS middleware |
+| groq-sdk | ^1.1.2 | Groq API клиент (AI roadmap; заменил @google/generative-ai) |
 
 **tsconfig:** `target: ES2022`, `module: CommonJS`, `strict: true`, `rootDir: src`, `outDir: dist`
 
@@ -48,12 +49,28 @@
 
 - **Docker Compose** — PostgreSQL 16-alpine, контейнер `sphub_postgres`
 - **Порты:** PostgreSQL `5433:5432` (5432 был занят системным PG), Backend `:4000`, Frontend `:3000`
-- **Env Backend:** `DATABASE_URL`, `JWT_SECRET`, `PORT=4000`, `GEMINI_API_KEY` (заглушка)
+- **Env Backend:** `DATABASE_URL`, `JWT_SECRET`, `PORT=4000`, `GROQ_API_KEY` (получить на console.groq.com/keys)
 - **Env Frontend:** `NEXT_PUBLIC_API_URL=http://localhost:4000/api`
 
 ---
 
-## 2. Что сделано (промпты 1–12, 14, 16–26, ICS-import)
+## 2. Что сделано (промпты 1–12, 14, 16–27, ICS-import)
+
+### Промпт 27 — Смена AI-провайдера: Gemini → Groq
+
+**Backend:**
+- Удалён пакет `@google/generative-ai`, установлен `groq-sdk@1.1.2`
+- `src/services/gemini.service.ts` удалён, создан `src/services/ai.service.ts`
+  - Модель: `llama-3.3-70b-versatile` (Groq)
+  - `response_format: { type: 'json_object' }` — JSON-mode для надёжного парсинга
+  - Groq json_object может вернуть объект с массивом внутри (не голый массив) — `ai.service.ts` обрабатывает оба варианта: проверяет корневой массив, `parsed.steps`, и `Object.values().find(Array.isArray)`
+  - `temperature: 0.7`
+  - Обработка 429/rate-limit ошибок: `'AI rate limit exceeded — попробуйте позже'`
+- `src/controllers/roadmap.controller.ts` — импорт обновлён с `gemini.service` на `ai.service`
+- `backend/.env` — `GEMINI_API_KEY` закомментирован, добавлен `GROQ_API_KEY=""` (пустой, нужно вставить ключ с console.groq.com/keys)
+
+**Frontend:**
+- `src/components/AIRoadmapModal.tsx` — строки "Gemini разбивает..." / "Gemini разобьёт..." заменены на "AI разбивает..." / "AI разобьёт..."
 
 ### Промпт 26 — Анимации переходов и stagger-списки
 

@@ -3,7 +3,7 @@ import { z } from 'zod';
 import { Role } from '@prisma/client';
 import prisma from '../utils/prisma';
 import { AppError } from '../utils/AppError';
-import { generateRoadmap, RoadmapStep } from '../services/gemini.service';
+import { generateRoadmap, RoadmapStep } from '../services/ai.service';
 
 // ─── Schemas ──────────────────────────────────────────────────────────────────
 
