@@ -95,11 +95,12 @@ I built Student Project Hub to explore what a focused, opinionated project manag
 
 Standard 3-tier architecture with clear separation between presentation, business logic, and data layers.
 
+```
 ┌─────────────────────────────────────────────────────────┐
 │  Presentation                                            │
 │  Next.js (App Router) · React · Tailwind                 │
 └──────────────────┬──────────────────────────────────────┘
-│ REST + JWT
+                   │ REST + JWT
 ┌──────────────────▼──────────────────────────────────────┐
 │  Application                                             │
 │  Express · TypeScript · zod                              │
@@ -108,14 +109,16 @@ Standard 3-tier architecture with clear separation between presentation, busines
 │  ├─ Middleware (requireAuth, requireRole, validate)      │
 │  └─ External: Groq API                                   │
 └──────────────────┬──────────────────────────────────────┘
-│ Prisma ORM
+                   │ Prisma ORM
 ┌──────────────────▼──────────────────────────────────────┐
 │  Data                                                    │
 │  PostgreSQL 16                                           │
 └─────────────────────────────────────────────────────────┘
+```
 
 ### Project layout
 
+```
 student-project-hub/
 ├── backend/
 │   ├── src/
@@ -138,6 +141,7 @@ student-project-hub/
 │       ├── lib/            # axios, theme, auth helpers
 │       └── types/
 └── docker-compose.yml
+```
 
 ---
 
@@ -271,7 +275,7 @@ Things I'd add given more time:
 
 **Mukhammed Tungyshbay**
 
-- GitHub: [@<your-github-username>](https://github.com/ummvvaa)
+- GitHub: [@ummvvaa](https://github.com/ummvvaa)
 - LinkedIn: [linkedin.com/in/<your-linkedin>](https://www.linkedin.com/in/mukhammed-tungyshbai-80aa78398/)
 
 If you have questions about the project or just want to chat, feel free to reach out.
