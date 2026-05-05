@@ -276,7 +276,7 @@ Things I'd add given more time:
 **Mukhammed Tungyshbay**
 
 - GitHub: [@ummvvaa](https://github.com/ummvvaa)
-- LinkedIn: [linkedin.com/in/<your-linkedin>](https://www.linkedin.com/in/mukhammed-tungyshbai-80aa78398/)
+- LinkedIn: [linkedin.com/in/mukhammed-tungyshbai-80aa78398/](https://www.linkedin.com/in/mukhammed-tungyshbai-80aa78398/)
 
 If you have questions about the project or just want to chat, feel free to reach out.
 
