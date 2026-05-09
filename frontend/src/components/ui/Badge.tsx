@@ -63,5 +63,10 @@ export function ProjectStatusBadge({ status }: { status: string }) {
     COMPLETED: 'info',
     ARCHIVED: 'default',
   };
-  return <Badge variant={map[status] ?? 'default'}>{status}</Badge>;
+  const label: Record<string, string> = {
+    ACTIVE: 'Активный',
+    COMPLETED: 'Завершён',
+    ARCHIVED: 'В архиве',
+  };
+  return <Badge variant={map[status] ?? 'default'}>{label[status] ?? status}</Badge>;
 }

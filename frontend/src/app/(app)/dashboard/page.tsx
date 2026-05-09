@@ -270,13 +270,6 @@ function StudentDashboard({ user }: { user: User }) {
           <EmptyState
             icon={Users}
             text="Вы пока не состоите ни в одной команде"
-            action={
-              <Link href="/projects">
-                <Button variant="secondary" size="sm">
-                  Найти проект
-                </Button>
-              </Link>
-            }
           />
         ) : (
           <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -393,8 +386,8 @@ function TeacherDashboard() {
 
   useEffect(() => {
     api
-      .get<{ projects: Project[] }>('/projects')
-      .then(({ data }) => setProjects(data.projects))
+      .get<{ projects: Project[] }>('/projects?status=all')
+      .then(({ data }) => setProjects(data.projects.filter((p) => p.status !== 'ARCHIVED')))
       .catch(() => toast.error('Ошибка загрузки проектов'))
       .finally(() => setLoading(false));
   }, []);
