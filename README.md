@@ -271,17 +271,6 @@ Things I'd add given more time:
 
 ---
 
-## Author
-
-**Mukhammed Tungyshbay**
-
-- GitHub: [@ummvvaa](https://github.com/ummvvaa)
-- LinkedIn: [linkedin.com/in/mukhammed-tungyshbai-80aa78398/](https://www.linkedin.com/in/mukhammed-tungyshbai-80aa78398/)
-
-If you have questions about the project or just want to chat, feel free to reach out.
-
----
-
 ## License
 
 MIT — feel free to use, modify, and learn from this project.
